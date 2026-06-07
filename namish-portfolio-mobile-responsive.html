@@ -1,0 +1,3095 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<meta content="#f1ebdc" name="theme-color"/>
+<title>Namish — Independent Design &amp; Development Studio · Ludhiana, India</title>
+<meta content="Independent studio building websites and applications for luxury Indian houses, dharmic publishers, and premium D2C brands. Brand identity, e-commerce, web applications, motion." name="description"/>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&amp;family=Inter+Tight:wght@400;500;700;900&amp;family=JetBrains+Mono:wght@400;500&amp;family=Martel:wght@600;700&amp;display=swap" rel="stylesheet"/>
+<style>
+/* ============================================================
+   TOKENS
+   ============================================================ */
+:root {
+  --paper:    #f1ebdc;
+  --paper-2:  #e6dfca;
+  --bone:     #faf6ec;
+  --ink:      #100f0c;
+  --ink-2:    #1c1a16;
+  --saffron:  #e2541c;
+  --saffron-deep: #c44211;
+  --crimson:  #6e1818;
+  --mute:     #6b6357;
+  --mute-2:   #8a8273;
+
+  --serif:    'Instrument Serif', 'Times New Roman', serif;
+  --sans:     'Inter Tight', system-ui, -apple-system, sans-serif;
+  --mono:     'JetBrains Mono', ui-monospace, monospace;
+  --deva:     'Martel', serif;
+
+  --gutter:   clamp(1rem, 3vw, 2.5rem);
+  --max:      1600px;
+  --ease:     cubic-bezier(0.65, 0, 0.35, 1);
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* ============================================================
+   RESET + BASE
+   ============================================================ */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+html, body { background: var(--paper); color: var(--ink); }
+body {
+  font-family: var(--sans);
+  font-size: 16px;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
+  cursor: none;
+}
+@media (hover: none) { body { cursor: auto; } }
+a { color: inherit; text-decoration: none; cursor: none; }
+@media (hover: none) { a { cursor: auto; } }
+button { font: inherit; background: none; border: 0; color: inherit; cursor: none; }
+@media (hover: none) { button { cursor: pointer; } }
+img, svg { display: block; max-width: 100%; }
+::selection { background: var(--ink); color: var(--saffron); }
+
+.wrap {
+  max-width: var(--max);
+  margin-inline: auto;
+  padding-inline: var(--gutter);
+}
+
+/* Grain overlay applied to body for subtle paper texture */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 99;
+  opacity: 0.04;
+  mix-blend-mode: multiply;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* ============================================================
+   CUSTOM CURSOR
+   ============================================================ */
+.cursor {
+  position: fixed;
+  top: 0; left: 0;
+  width: 8px; height: 8px;
+  background: var(--ink);
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 9999;
+  transform: translate(-50%, -50%);
+  mix-blend-mode: difference;
+  transition: width 0.3s var(--ease), height 0.3s var(--ease),
+              background 0.3s var(--ease);
+}
+.cursor.hover {
+  width: 72px; height: 72px;
+  background: var(--saffron);
+}
+.cursor.text-mode {
+  width: 4px; height: 24px;
+  border-radius: 1px;
+}
+.cursor-ring {
+  position: fixed;
+  top: 0; left: 0;
+  width: 40px; height: 40px;
+  border: 1px solid var(--ink);
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 9998;
+  transform: translate(-50%, -50%);
+  mix-blend-mode: difference;
+  transition: width 0.4s var(--ease), height 0.4s var(--ease),
+              opacity 0.3s var(--ease);
+}
+.cursor-ring.hover { opacity: 0; }
+@media (hover: none) { .cursor, .cursor-ring { display: none; } }
+
+/* ============================================================
+   LOADER
+   ============================================================ */
+.loader {
+  position: fixed; inset: 0;
+  background: var(--ink);
+  z-index: 10000;
+  color: var(--paper);
+  font-family: var(--mono);
+  font-size: 0.75rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  animation: loaderOut 1s var(--ease-out) 2.6s forwards;
+  overflow: hidden;
+}
+.loader-name {
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: clamp(4rem, 14vw, 11rem);
+  line-height: 0.85;
+  letter-spacing: -0.04em;
+  color: var(--paper);
+  text-transform: none;
+  position: absolute;
+  bottom: var(--gutter);
+  left: var(--gutter);
+}
+.loader-name span {
+  display: inline-block;
+  opacity: 0;
+  transform: translateY(100%);
+  animation: letterIn 0.8s var(--ease-out) forwards;
+}
+.loader-name span:nth-child(1) { animation-delay: 0.10s; }
+.loader-name span:nth-child(2) { animation-delay: 0.18s; }
+.loader-name span:nth-child(3) { animation-delay: 0.26s; }
+.loader-name span:nth-child(4) { animation-delay: 0.34s; }
+.loader-name span:nth-child(5) { animation-delay: 0.42s; }
+.loader-name span:nth-child(6) { animation-delay: 0.50s; }
+.loader-counter {
+  position: absolute;
+  bottom: var(--gutter);
+  right: var(--gutter);
+  font-variant-numeric: tabular-nums;
+  font-size: 0.75rem;
+}
+.loader-top {
+  position: absolute;
+  top: var(--gutter);
+  left: var(--gutter);
+  display: flex;
+  gap: 2rem;
+}
+.loader-top span { opacity: 0.6; }
+.loader-bar {
+  position: absolute;
+  top: var(--gutter);
+  right: var(--gutter);
+  width: 200px;
+  height: 1px;
+  background: rgba(241, 235, 220, 0.15);
+}
+.loader-bar::after {
+  content: '';
+  position: absolute;
+  top: 0; left: 0;
+  height: 100%;
+  width: 0;
+  background: var(--saffron);
+  animation: loaderBar 2.5s var(--ease-out) forwards;
+}
+@keyframes loaderBar { to { width: 100%; } }
+@keyframes letterIn { to { opacity: 1; transform: translateY(0); } }
+@keyframes loaderOut { to { transform: translateY(-101%); } }
+body.loaded .loader { pointer-events: none; }
+
+/* ============================================================
+   TOP NAV — AUTO HIDING + MOBILE MENU
+   ============================================================ */
+.site-nav {
+  position: fixed;
+  top: 0.85rem;
+  left: 50%;
+  right: auto;
+  z-index: 100;
+  width: min(calc(100% - 2rem), 1480px);
+  transform: translate(-50%, 0);
+  padding: 0.7rem 0.85rem 0.7rem 1rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  font-family: var(--mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--ink);
+  background: rgba(250, 246, 236, 0.74);
+  border: 1px solid rgba(16, 15, 12, 0.12);
+  border-radius: 999px;
+  box-shadow: 0 18px 55px rgba(16, 15, 12, 0.08);
+  backdrop-filter: blur(18px) saturate(1.08);
+  -webkit-backdrop-filter: blur(18px) saturate(1.08);
+  transition: transform 0.42s var(--ease-out), opacity 0.32s var(--ease-out),
+              background 0.32s var(--ease-out), border-color 0.32s var(--ease-out);
+}
+.site-nav.nav-hidden {
+  transform: translate(-50%, calc(-100% - 1.4rem));
+  opacity: 0;
+  pointer-events: none;
+}
+.site-nav.nav-at-top {
+  background: rgba(250, 246, 236, 0.56);
+}
+.site-nav .left,
+.site-nav .right {
+  display: flex;
+  gap: clamp(0.9rem, 2vw, 2.3rem);
+  align-items: center;
+}
+.site-nav .left { min-width: 0; }
+.site-nav .right { justify-content: flex-end; }
+.site-nav .clock {
+  font-variant-numeric: tabular-nums;
+  opacity: 0.62;
+  white-space: nowrap;
+}
+.site-nav a {
+  position: relative;
+  transition: opacity 0.3s, color 0.3s;
+  outline-offset: 4px;
+}
+.site-nav a:hover { color: var(--saffron); opacity: 1; }
+.site-nav .brand-link {
+  font-weight: 700;
+  white-space: nowrap;
+}
+.site-nav .availability {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  white-space: nowrap;
+}
+.site-nav .availability .dot {
+  width: 8px; height: 8px; border-radius: 50%;
+  background: var(--saffron);
+  animation: pulse 2s ease-in-out infinite;
+}
+.nav-toggle {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  gap: 0.65rem;
+  min-height: 42px;
+  padding: 0 0.95rem;
+  border: 1px solid rgba(16, 15, 12, 0.14);
+  border-radius: 999px;
+  color: var(--ink);
+  background: rgba(241, 235, 220, 0.85);
+  font-family: var(--mono);
+  font-size: 0.65rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  transition: background 0.3s var(--ease), color 0.3s var(--ease);
+}
+.nav-toggle:hover { background: var(--ink); color: var(--paper); }
+.nav-toggle-lines {
+  width: 16px;
+  height: 10px;
+  position: relative;
+  display: inline-block;
+}
+.nav-toggle-lines::before,
+.nav-toggle-lines::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  width: 100%;
+  height: 1.5px;
+  background: currentColor;
+  border-radius: 99px;
+  transition: transform 0.28s var(--ease), top 0.28s var(--ease);
+}
+.nav-toggle-lines::before { top: 0; }
+.nav-toggle-lines::after { top: 8px; }
+.site-nav.nav-open .nav-toggle-lines::before { top: 4px; transform: rotate(45deg); }
+.site-nav.nav-open .nav-toggle-lines::after { top: 4px; transform: rotate(-45deg); }
+@keyframes pulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50%      { opacity: 0.5; transform: scale(1.4); }
+}
+@media (max-width: 980px) {
+  .site-nav {
+    top: 0.75rem;
+    width: calc(100% - 1rem);
+    padding: 0.55rem 0.55rem 0.55rem 0.9rem;
+    font-size: 0.66rem;
+  }
+  .site-nav .right { gap: 1rem; }
+  .site-nav .hide-mobile { display: none; }
+}
+@media (max-width: 720px) {
+  .site-nav {
+    top: 0.65rem;
+    width: calc(100% - 0.9rem);
+    border-radius: 1.3rem;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+  .site-nav .left { flex: 1; }
+  .nav-toggle { display: inline-flex; }
+  .site-nav .right {
+    order: 3;
+    width: 100%;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 0.35rem;
+    max-height: 0;
+    opacity: 0;
+    overflow: hidden;
+    pointer-events: none;
+    transition: max-height 0.42s var(--ease-out), opacity 0.28s var(--ease-out), padding 0.28s var(--ease-out);
+  }
+  .site-nav.nav-open { border-radius: 1.45rem; background: rgba(250, 246, 236, 0.96); }
+  .site-nav.nav-open .right {
+    max-height: 420px;
+    opacity: 1;
+    pointer-events: auto;
+    padding: 0.55rem 0.1rem 0.2rem;
+  }
+  .site-nav .right a,
+  .site-nav .availability {
+    display: flex;
+    min-height: 44px;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.7rem 0.95rem;
+    border-radius: 0.95rem;
+    background: rgba(16, 15, 12, 0.045);
+  }
+  .site-nav .right a::after { content: '→'; color: var(--saffron); }
+  .site-nav .availability.hide-mobile { display: flex; }
+  .hero { padding-top: 7rem; }
+}
+
+/* ============================================================
+   HERO
+   ============================================================ */
+.hero {
+  min-height: 100vh;
+  display: flex; flex-direction: column; justify-content: flex-end;
+  padding: 6rem var(--gutter) 2rem;
+  position: relative;
+  overflow: hidden;
+}
+.hero-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 3rem;
+  align-items: end;
+  margin-bottom: 2rem;
+}
+@media (min-width: 900px) {
+  .hero-grid { grid-template-columns: 1fr 1fr; gap: 4rem; }
+}
+
+.hero-intro {
+  font-family: var(--mono);
+  font-size: 0.78rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--ink);
+  margin-bottom: 2rem;
+  display: flex; align-items: center; gap: 1rem;
+}
+.hero-intro::before {
+  content: ''; width: 28px; height: 1px; background: var(--ink);
+}
+
+.hero-statement {
+  font-family: var(--serif);
+  font-style: italic;
+  font-weight: 400;
+  font-size: clamp(1.5rem, 3vw, 2.2rem);
+  line-height: 1.2;
+  letter-spacing: -0.015em;
+  max-width: 32rem;
+  color: var(--ink);
+}
+.hero-statement .accent { color: var(--saffron); font-style: italic; }
+
+.hero-meta {
+  font-family: var(--mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--mute);
+  display: flex; flex-direction: column; gap: 0.4rem;
+}
+.hero-meta .available {
+  color: var(--saffron);
+  margin-top: 0.5rem;
+  display: inline-flex; align-items: center; gap: 0.5rem;
+}
+.hero-meta .available::before {
+  content: ''; width: 8px; height: 8px; border-radius: 50%;
+  background: var(--saffron); animation: pulse 2s ease-in-out infinite;
+}
+
+.hero-name {
+  font-family: var(--serif);
+  font-style: italic;
+  font-weight: 400;
+  font-size: clamp(5rem, 22vw, 22rem);
+  line-height: 0.82;
+  letter-spacing: -0.05em;
+  color: var(--ink);
+  margin-top: 1rem;
+  white-space: nowrap;
+  display: flex;
+  align-items: baseline;
+  position: relative;
+}
+.hero-name .dot { color: var(--saffron); font-style: italic; }
+.hero-name .deva {
+  font-family: var(--deva);
+  font-weight: 700;
+  font-style: normal;
+  font-size: 0.2em;
+  color: var(--saffron);
+  margin-left: 0.4em;
+  vertical-align: super;
+  letter-spacing: 0;
+}
+
+.hero-coords {
+  position: absolute;
+  top: 50%; right: var(--gutter);
+  transform: translateY(-50%) rotate(90deg);
+  transform-origin: right center;
+  font-family: var(--mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--mute);
+}
+@media (max-width: 900px) { .hero-coords { display: none; } }
+
+.hero-scroll {
+  position: absolute;
+  bottom: 1.5rem;
+  left: 50%;
+  transform: translateX(-50%);
+  font-family: var(--mono);
+  font-size: 0.65rem;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: var(--mute);
+  display: flex; flex-direction: column; align-items: center; gap: 0.6rem;
+}
+.hero-scroll::after {
+  content: ''; width: 1px; height: 30px;
+  background: linear-gradient(to bottom, var(--ink), transparent);
+  animation: scrollPulse 2s ease-in-out infinite;
+}
+@keyframes scrollPulse {
+  0%, 100% { opacity: 0.3; transform: scaleY(1); transform-origin: top; }
+  50% { opacity: 1; transform: scaleY(1.3); }
+}
+
+/* ============================================================
+   MARQUEES
+   ============================================================ */
+.marquee {
+  background: var(--ink);
+  color: var(--paper);
+  overflow: hidden;
+  padding: 1.5rem 0;
+  position: relative;
+  z-index: 2;
+}
+.marquee.tilt {
+  transform: rotate(-2deg);
+  margin: 2rem -3% 0;
+  width: 106%;
+  border-top: 1px solid var(--ink);
+  border-bottom: 1px solid var(--ink);
+}
+.marquee.tilt-reverse {
+  transform: rotate(2deg);
+  margin: 0 -3% 2rem;
+  width: 106%;
+  background: var(--saffron);
+  color: var(--ink);
+}
+.marquee-track {
+  display: flex; gap: 4rem;
+  white-space: nowrap;
+  animation: marquee 35s linear infinite;
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: clamp(2rem, 5vw, 4rem);
+  line-height: 1;
+  letter-spacing: -0.02em;
+}
+.marquee-track.reverse { animation: marquee 40s linear infinite reverse; }
+.marquee-track span { display: inline-flex; align-items: center; gap: 4rem; }
+.marquee-track .star { color: var(--saffron); font-size: 0.7em; }
+.marquee.tilt-reverse .marquee-track .star { color: var(--ink); }
+@keyframes marquee { to { transform: translateX(-50%); } }
+
+/* ============================================================
+   INDEX SECTION
+   ============================================================ */
+.index {
+  padding: 8rem var(--gutter) 4rem;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 4rem;
+}
+@media (min-width: 900px) {
+  .index { grid-template-columns: 1.4fr 1fr; gap: 6rem; }
+}
+
+.index-text {
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: clamp(1.6rem, 3vw, 2.5rem);
+  line-height: 1.25;
+  letter-spacing: -0.015em;
+  max-width: 38rem;
+  color: var(--ink);
+}
+.index-text .accent { color: var(--saffron); }
+.index-text strong {
+  font-family: var(--sans);
+  font-style: normal;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  color: var(--ink);
+}
+
+.stats {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 2rem;
+  align-self: end;
+}
+.stat-num {
+  font-family: var(--sans);
+  font-weight: 900;
+  font-size: clamp(3rem, 5vw, 4.5rem);
+  line-height: 1;
+  letter-spacing: -0.04em;
+  color: var(--ink);
+}
+.stat-num .small {
+  font-size: 0.45em;
+  vertical-align: top;
+  color: var(--saffron);
+  margin-left: 0.1em;
+}
+.stat-label {
+  font-family: var(--mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--mute);
+  margin-top: 0.75rem;
+  max-width: 12rem;
+  line-height: 1.5;
+}
+
+/* ============================================================
+   SECTION MARKER
+   ============================================================ */
+.section-marker {
+  padding: 6rem var(--gutter) 3rem;
+  display: flex; align-items: end; justify-content: space-between;
+  gap: 2rem;
+  border-top: 1px solid var(--ink);
+  flex-wrap: wrap;
+}
+.section-marker .label {
+  font-family: var(--mono);
+  font-size: 0.78rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--mute);
+}
+.section-marker .title {
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: clamp(4rem, 12vw, 11rem);
+  line-height: 0.85;
+  letter-spacing: -0.04em;
+  color: var(--ink);
+}
+.section-marker .title .accent { color: var(--saffron); }
+.section-marker .meta {
+  font-family: var(--mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--mute);
+  text-align: right;
+  line-height: 1.6;
+}
+
+/* ============================================================
+   WORK SHOWCASES
+   ============================================================ */
+.work-section { padding: 0 var(--gutter) 8rem; }
+
+.showcase {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 2rem;
+  align-items: center;
+  padding: 4rem 0;
+  border-top: 1px solid rgba(16, 15, 12, 0.15);
+}
+@media (min-width: 900px) {
+  .showcase { grid-template-columns: 1fr 1fr; gap: 4rem; }
+  .showcase.reverse .showcase-info { order: 2; }
+  .showcase.reverse .showcase-visual { order: 1; }
+}
+
+.showcase-visual {
+  position: relative;
+  aspect-ratio: 4 / 3;
+  overflow: hidden;
+  transition: transform 0.6s var(--ease-out);
+}
+.showcase-visual:hover { transform: scale(1.01); }
+
+.showcase-info { padding: 1rem 0; }
+.showcase-num {
+  font-family: var(--mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--saffron);
+  margin-bottom: 1rem;
+  display: flex; align-items: center; gap: 0.75rem;
+}
+.showcase-num::after {
+  content: ''; flex: 1; height: 1px; background: rgba(16,15,12,0.2);
+}
+.showcase-title {
+  font-family: var(--serif);
+  font-style: italic;
+  font-weight: 400;
+  font-size: clamp(3rem, 6vw, 5rem);
+  line-height: 0.95;
+  letter-spacing: -0.025em;
+  color: var(--ink);
+  margin-bottom: 0.5rem;
+}
+.showcase-deva {
+  font-family: var(--deva);
+  font-weight: 700;
+  font-size: 1.1rem;
+  color: var(--saffron);
+  margin-bottom: 1.5rem;
+  letter-spacing: 0.02em;
+}
+.showcase-desc {
+  font-family: var(--sans);
+  font-size: 1rem;
+  line-height: 1.6;
+  max-width: 28rem;
+  color: var(--ink-2);
+  margin-bottom: 1.5rem;
+}
+
+.case-results {
+  list-style: none;
+  display: grid;
+  gap: 0.55rem;
+  max-width: 30rem;
+  margin: -0.25rem 0 1.5rem;
+}
+.case-results li {
+  position: relative;
+  padding-left: 1.1rem;
+  font-family: var(--sans);
+  font-size: 0.9rem;
+  line-height: 1.55;
+  color: var(--ink-2);
+}
+.case-results li::before {
+  content: '✓';
+  position: absolute;
+  left: 0;
+  top: 0.05rem;
+  color: var(--saffron);
+  font-family: var(--mono);
+  font-size: 0.72rem;
+}
+.showcase-credits {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 0.6rem 1.5rem;
+  margin-bottom: 1.5rem;
+  font-family: var(--mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  max-width: 28rem;
+}
+.showcase-credits dt { color: var(--mute); }
+.showcase-credits dd { color: var(--ink); }
+.showcase-tags {
+  display: flex; flex-wrap: wrap; gap: 0.6rem;
+  margin-bottom: 2rem;
+}
+.tag {
+  font-family: var(--mono);
+  font-size: 0.62rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  padding: 0.45rem 0.85rem;
+  border: 1px solid var(--ink);
+  border-radius: 999px;
+  color: var(--ink);
+}
+.showcase-cta {
+  display: inline-flex; align-items: center; gap: 0.75rem;
+  font-family: var(--mono);
+  font-size: 0.75rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--ink);
+  padding-bottom: 4px;
+  border-bottom: 1px solid var(--ink);
+  transition: gap 0.3s var(--ease), color 0.3s var(--ease);
+}
+.showcase-cta:hover { gap: 1.3rem; color: var(--saffron); }
+.showcase-cta::after { content: '→'; }
+
+/* ============================================================
+   PROJECT-SPECIFIC VISUALS
+   ============================================================ */
+/* -- Nivaratnam ---------------------------------------------- */
+.visual-nivaratnam {
+  background: linear-gradient(135deg, #fffdf8 0%, #f5e6d3 60%, #fce4d6 100%);
+}
+.visual-nivaratnam .orb {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(60px);
+  opacity: 0.6;
+  animation: orbFloat 16s ease-in-out infinite;
+}
+.visual-nivaratnam .orb-1 { background: #c5a028; width: 50%; height: 50%; top: -10%; left: -10%; }
+.visual-nivaratnam .orb-2 { background: #f9a8d4; width: 45%; height: 45%; bottom: -15%; right: -10%; animation-delay: -6s; }
+.visual-nivaratnam .orb-3 { background: #a3b18a; width: 30%; height: 30%; top: 35%; right: 30%; opacity: 0.35; animation-delay: -11s; }
+@keyframes orbFloat {
+  0%, 100% { transform: translate(0,0) scale(1); }
+  33% { transform: translate(8%,-5%) scale(1.05); }
+  66% { transform: translate(-5%,8%) scale(0.95); }
+}
+.visual-nivaratnam .content {
+  position: absolute; inset: 0;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  z-index: 2; text-align: center; padding: 2rem;
+}
+.visual-nivaratnam .label {
+  font-family: var(--mono); font-size: 0.65rem;
+  letter-spacing: 0.25em; text-transform: uppercase;
+  color: #8a6a2a; margin-bottom: 1.5rem;
+}
+.visual-nivaratnam .wordmark {
+  font-family: var(--serif); font-style: italic;
+  font-size: clamp(2.5rem, 6vw, 5rem);
+  letter-spacing: -0.02em;
+  color: #292524; line-height: 1;
+}
+.visual-nivaratnam .deva {
+  font-family: var(--deva); font-weight: 600;
+  color: #8a6a2a; font-size: 1.1rem;
+  margin-top: 1rem;
+}
+.visual-nivaratnam .divider {
+  width: 60px; height: 1px; background: #c5a028;
+  margin: 1.5rem auto;
+}
+
+/* -- Steelica ------------------------------------------------ */
+.visual-steelica {
+  background: #0a0a0a;
+  background-image:
+    linear-gradient(rgba(196,30,58,0.12) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(196,30,58,0.12) 1px, transparent 1px);
+  background-size: 32px 32px;
+}
+.visual-steelica .content {
+  position: absolute; inset: 0;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  z-index: 2; padding: 2rem; text-align: center;
+}
+.visual-steelica .hex-mark {
+  position: absolute; top: 2rem; right: 2rem;
+  width: 32px; height: 32px;
+  border: 1px solid #c41e3a;
+  transform: rotate(45deg);
+}
+.visual-steelica .label {
+  font-family: var(--mono); font-size: 0.65rem;
+  letter-spacing: 0.3em; text-transform: uppercase;
+  color: #c41e3a; margin-bottom: 1.5rem;
+}
+.visual-steelica .wordmark {
+  font-family: var(--serif); font-style: italic;
+  font-weight: 400;
+  font-size: clamp(3rem, 7vw, 6rem);
+  letter-spacing: -0.025em;
+  color: #fff; line-height: 1;
+}
+.visual-steelica .wordmark .ica { color: #c41e3a; }
+.visual-steelica .bar {
+  width: 60px; height: 3px; background: #c41e3a;
+  margin: 1.5rem auto 0;
+}
+.visual-steelica .tag-line {
+  margin-top: 1.5rem;
+  font-family: var(--mono); font-size: 0.62rem;
+  letter-spacing: 0.25em; text-transform: uppercase;
+  color: rgba(255,255,255,0.5);
+  border: 1px solid rgba(255,255,255,0.2);
+  padding: 0.4rem 0.85rem; border-radius: 999px;
+}
+
+/* -- Sutra --------------------------------------------------- */
+.visual-sutra {
+  background: linear-gradient(135deg, #0f0c29 0%, #1a1a3e 50%, #16213e 100%);
+}
+.visual-sutra .blob {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(70px);
+  opacity: 0.5;
+  animation: blobShift 20s ease-in-out infinite;
+}
+.visual-sutra .blob-1 { background: #a78bfa; width: 55%; height: 55%; top: -15%; left: -15%; }
+.visual-sutra .blob-2 { background: #67e8f9; width: 45%; height: 45%; bottom: -15%; right: -10%; animation-delay: -7s; }
+.visual-sutra .blob-3 { background: #f9a8d4; width: 35%; height: 35%; top: 30%; right: 25%; animation-delay: -13s; }
+@keyframes blobShift {
+  0%, 100% { transform: translate(0,0) scale(1); }
+  50% { transform: translate(8%, -5%) scale(1.08); }
+}
+.visual-sutra .content {
+  position: absolute; inset: 0;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  z-index: 2; padding: 2rem;
+}
+.visual-sutra .glass {
+  background: rgba(255,255,255,0.08);
+  border: 1px solid rgba(255,255,255,0.15);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+  border-radius: 18px;
+  padding: 1.4rem 1.6rem;
+  width: 88%;
+  max-width: 360px;
+  box-shadow: 0 10px 40px rgba(0,0,0,0.4);
+  color: #fff;
+}
+.visual-sutra .mood {
+  display: flex; align-items: center; gap: 0.6rem;
+  font-family: var(--mono); font-size: 0.62rem;
+  letter-spacing: 0.15em; text-transform: uppercase;
+  color: rgba(255,255,255,0.6);
+  margin-bottom: 0.75rem;
+}
+.visual-sutra .mood .dot {
+  width: 8px; height: 8px; border-radius: 50%; background: #a78bfa;
+  box-shadow: 0 0 14px #a78bfa;
+}
+.visual-sutra .entry-title {
+  font-family: var(--serif); font-style: italic;
+  font-size: 1.5rem; color: #fff; line-height: 1.2;
+  margin-bottom: 0.5rem;
+}
+.visual-sutra .entry-body {
+  font-family: var(--sans); font-size: 0.78rem;
+  line-height: 1.55; color: rgba(255,255,255,0.5);
+}
+
+/* -- VidurNeeti ---------------------------------------------- */
+.visual-vidurneeti { background: #000; }
+.visual-vidurneeti .flower {
+  position: absolute;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  width: 70%; max-width: 380px;
+  aspect-ratio: 1;
+  opacity: 0.25;
+  animation: spin 90s linear infinite;
+}
+@keyframes spin { to { transform: translate(-50%, -50%) rotate(360deg); } }
+.visual-vidurneeti .content {
+  position: absolute; inset: 0;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  z-index: 2; padding: 2rem; text-align: center;
+}
+.visual-vidurneeti .deva-big {
+  font-family: var(--deva); font-weight: 700;
+  font-size: clamp(2.5rem, 6vw, 4.5rem);
+  color: #c9a049;
+  letter-spacing: 0.04em;
+  line-height: 1;
+}
+.visual-vidurneeti .tagline-text {
+  font-family: var(--mono); font-size: 0.7rem;
+  letter-spacing: 0.35em; text-transform: uppercase;
+  color: #8a6a2a;
+  margin-top: 1.25rem;
+}
+.visual-vidurneeti .corner {
+  position: absolute; top: 1.5rem; left: 1.5rem;
+  font-family: var(--mono); font-size: 0.6rem;
+  letter-spacing: 0.2em; text-transform: uppercase;
+  color: rgba(201, 160, 73, 0.5);
+}
+
+/* -- Gita Daily ---------------------------------------------- */
+.visual-gita {
+  background: linear-gradient(135deg, #f4ecd6 0%, #ebdcb5 100%);
+  position: relative;
+}
+.visual-gita::before {
+  content: '';
+  position: absolute; inset: 0;
+  background:
+    radial-gradient(circle at 20% 30%, rgba(196,160,40,0.12), transparent 50%),
+    radial-gradient(circle at 80% 70%, rgba(180,140,30,0.10), transparent 50%);
+}
+.visual-gita .content {
+  position: absolute; inset: 0;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  z-index: 2; padding: 2rem; text-align: center;
+}
+.visual-gita .verse {
+  font-family: var(--deva); font-weight: 600;
+  font-size: clamp(1.4rem, 3.5vw, 2rem);
+  color: #4a3520; line-height: 1.5;
+  max-width: 380px;
+}
+.visual-gita .flourish {
+  width: 100px; height: 1px;
+  background: linear-gradient(90deg, transparent, #b48c39, transparent);
+  margin: 1.5rem auto;
+}
+.visual-gita .cite {
+  font-family: var(--mono); font-size: 0.65rem;
+  letter-spacing: 0.25em; text-transform: uppercase;
+  color: #8a6a2a;
+}
+
+/* -- Japa Counter -------------------------------------------- */
+.visual-japa { background: #f5f3ec; }
+.visual-japa .mala {
+  position: absolute; inset: 0;
+  display: flex; align-items: center; justify-content: center;
+}
+.visual-japa .mala-svg { width: 75%; max-width: 320px; height: 75%; max-height: 320px; }
+.visual-japa .content {
+  position: absolute; inset: 0;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  z-index: 2; padding: 2rem; text-align: center;
+}
+.visual-japa .count {
+  font-family: var(--serif); font-style: italic;
+  font-size: clamp(4rem, 9vw, 7rem);
+  color: #44403c; line-height: 1;
+}
+.visual-japa .mantra {
+  font-family: var(--serif); font-style: italic;
+  font-size: 1.1rem; color: #b8762c;
+  margin-top: 0.5rem;
+}
+
+/* -- Niches (opportunity terminal) --------------------------- */
+.visual-niches {
+  background: radial-gradient(120% 120% at 50% 0%, #0d1411 0%, #070a09 60%, #050605 100%);
+  font-family: var(--mono);
+}
+.visual-niches .content {
+  position: absolute; inset: 0;
+  display: flex; flex-direction: column; justify-content: center;
+  z-index: 2; padding: clamp(1.5rem, 4vw, 2.75rem);
+}
+.visual-niches .term-top {
+  display: flex; align-items: center; gap: 0.55rem;
+  font-size: 0.6rem; letter-spacing: 0.22em; text-transform: uppercase;
+  color: #4ade80; margin-bottom: 1.5rem;
+}
+.visual-niches .term-top .led {
+  width: 7px; height: 7px; border-radius: 50%;
+  background: #4ade80; box-shadow: 0 0 10px #4ade80;
+}
+.visual-niches .prompt {
+  font-size: clamp(1rem, 2.4vw, 1.45rem);
+  color: #e8f5ee; margin-bottom: 1.5rem;
+}
+.visual-niches .prompt .cmd { color: #4ade80; }
+.visual-niches .prompt .caret {
+  display: inline-block; width: 0.55ch; height: 1.05em;
+  background: #4ade80; vertical-align: -0.18em; margin-left: 2px;
+  animation: nichesBlink 1.1s steps(1) infinite;
+}
+@keyframes nichesBlink { 50% { opacity: 0; } }
+.visual-niches .scores { display: grid; gap: 0.6rem; margin-bottom: 1.4rem; }
+.visual-niches .score-row {
+  display: grid; grid-template-columns: 96px 1fr 30px;
+  align-items: center; gap: 0.75rem;
+  font-size: 0.58rem; letter-spacing: 0.1em; text-transform: uppercase;
+  color: rgba(232,245,238,0.55);
+}
+.visual-niches .meter { height: 4px; background: rgba(74,222,128,0.14); border-radius: 2px; overflow: hidden; }
+.visual-niches .meter i { display: block; height: 100%; background: #4ade80; border-radius: 2px; }
+.visual-niches .score-row b { color: #4ade80; text-align: right; font-weight: 500; }
+.visual-niches .verdict {
+  align-self: flex-start;
+  font-size: 0.6rem; letter-spacing: 0.18em; text-transform: uppercase;
+  color: #050605; background: #4ade80;
+  padding: 0.42rem 0.85rem; border-radius: 4px;
+}
+
+/* -- Lumis (luxury atelier · concept) ------------------------ */
+.visual-lumis {
+  background: radial-gradient(130% 100% at 50% 120%, #1c1813 0%, #0e0c0a 55%, #070605 100%);
+}
+.visual-lumis .content {
+  position: absolute; inset: 0;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  z-index: 2; text-align: center; padding: 2rem;
+}
+.visual-lumis .glyph { font-size: 1.4rem; color: #c9a86a; margin-bottom: 1.3rem; opacity: 0.85; }
+.visual-lumis .label {
+  font-family: var(--mono); font-size: 0.6rem;
+  letter-spacing: 0.3em; text-transform: uppercase;
+  color: #9a8458; margin-bottom: 1.3rem;
+}
+.visual-lumis .wordmark {
+  font-family: var(--serif);
+  font-size: clamp(3rem, 8vw, 6rem); letter-spacing: 0.12em; line-height: 1;
+  background: linear-gradient(180deg, #f6efe3 0%, #c9a86a 140%);
+  -webkit-background-clip: text; background-clip: text;
+  -webkit-text-fill-color: transparent; color: #f3ece0;
+}
+.visual-lumis .divider {
+  width: 64px; height: 1px; margin: 1.4rem auto;
+  background: linear-gradient(90deg, transparent, #c9a86a, transparent);
+}
+.visual-lumis .tagline {
+  font-family: var(--serif); font-style: italic;
+  font-size: 1.05rem; color: rgba(243,236,224,0.7);
+}
+
+/* -- Vanta (hypersonic defence · fictional concept) ---------- */
+.visual-vanta {
+  background: #04060a;
+  background-image:
+    linear-gradient(rgba(255,107,26,0.08) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,107,26,0.08) 1px, transparent 1px);
+  background-size: 30px 30px;
+  font-family: var(--mono);
+}
+.visual-vanta .reticle {
+  position: absolute; top: 50%; left: 50%;
+  width: 60%; aspect-ratio: 1; transform: translate(-50%,-50%);
+  opacity: 0.45; pointer-events: none;
+}
+.visual-vanta .reticle svg { width: 100%; height: 100%; }
+.visual-vanta .scan {
+  position: absolute; left: 0; right: 0; top: 0; height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(255,107,26,0.6), transparent);
+  animation: vantaScan 4.5s linear infinite;
+}
+@keyframes vantaScan { to { top: 100%; } }
+.visual-vanta .hud-tl, .visual-vanta .hud-br {
+  position: absolute; font-size: 0.52rem; line-height: 1.6;
+  letter-spacing: 0.14em; text-transform: uppercase; color: rgba(255,107,26,0.7);
+}
+.visual-vanta .hud-tl { top: 1.3rem; left: 1.3rem; }
+.visual-vanta .hud-br { bottom: 1.3rem; right: 1.3rem; text-align: right; }
+.visual-vanta .content {
+  position: absolute; inset: 0;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  z-index: 2; text-align: center; padding: 2rem;
+}
+.visual-vanta .mach {
+  font-family: var(--serif); font-style: italic;
+  font-size: clamp(3.2rem, 9vw, 5.6rem); line-height: 1; color: #fff;
+}
+.visual-vanta .mach span { color: #ff6b1a; }
+.visual-vanta .sub {
+  margin-top: 0.85rem; font-size: 0.58rem;
+  letter-spacing: 0.26em; text-transform: uppercase; color: rgba(255,255,255,0.5);
+}
+.visual-vanta .status {
+  margin-top: 1.25rem; font-size: 0.56rem; letter-spacing: 0.2em;
+  text-transform: uppercase; color: #ff6b1a;
+  border: 1px solid rgba(255,107,26,0.4); border-radius: 999px;
+  padding: 0.35rem 0.85rem;
+}
+
+/* -- Brodha V (artist site · concept) ------------------------ */
+.visual-brodhav {
+  background: radial-gradient(120% 120% at 80% 0%, #2a1830 0%, #120a16 55%, #080509 100%);
+}
+.visual-brodhav .content {
+  position: absolute; inset: 0;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  z-index: 2; text-align: center; padding: 2rem;
+}
+.visual-brodhav .om {
+  font-family: var(--deva); font-weight: 700;
+  font-size: 1.25rem; color: #d4af37; margin-bottom: 1rem; opacity: 0.85;
+}
+.visual-brodhav .wordmark {
+  font-family: var(--sans); font-weight: 900;
+  font-size: clamp(2.6rem, 7.5vw, 5rem); line-height: 0.9;
+  letter-spacing: -0.02em; color: #f4f0ea; text-transform: uppercase;
+}
+.visual-brodhav .wordmark span { color: #d4af37; }
+.visual-brodhav .tag {
+  margin-top: 1.05rem; font-family: var(--mono);
+  font-size: 0.58rem; letter-spacing: 0.2em; text-transform: uppercase;
+  color: rgba(244,240,234,0.55);
+}
+.visual-brodhav .stat {
+  margin-top: 1.3rem; font-family: var(--mono);
+  font-size: 0.6rem; letter-spacing: 0.14em; text-transform: uppercase; color: #d4af37;
+}
+
+/* -- Hanumankind (artist site · concept) --------------------- */
+.visual-hanumankind {
+  background: radial-gradient(110% 120% at 50% 50%, #1f0a06 0%, #120504 55%, #070302 100%);
+}
+.visual-hanumankind .ring {
+  position: absolute; top: 50%; left: 50%;
+  width: 70%; aspect-ratio: 1; transform: translate(-50%,-50%);
+  border: 1px solid rgba(255,59,31,0.32); border-radius: 50%; pointer-events: none;
+}
+.visual-hanumankind .ring::after {
+  content: ''; position: absolute; inset: 14%;
+  border: 1px solid rgba(255,59,31,0.18); border-radius: 50%;
+}
+.visual-hanumankind .content {
+  position: absolute; inset: 0;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  z-index: 2; text-align: center; padding: 2rem;
+}
+.visual-hanumankind .label {
+  font-family: var(--mono); font-size: 0.56rem;
+  letter-spacing: 0.24em; text-transform: uppercase; color: #ff3b1f; margin-bottom: 1rem;
+}
+.visual-hanumankind .wordmark {
+  font-family: var(--sans); font-weight: 900;
+  font-size: clamp(2.8rem, 8vw, 5.4rem); line-height: 0.85;
+  letter-spacing: -0.03em; text-transform: uppercase; color: #f6f1ea;
+}
+.visual-hanumankind .wordmark em { font-style: normal; color: #ff3b1f; display: block; }
+.visual-hanumankind .meta {
+  margin-top: 1.15rem; font-family: var(--mono);
+  font-size: 0.56rem; letter-spacing: 0.16em; text-transform: uppercase;
+  color: rgba(246,241,234,0.5);
+  display: flex; gap: 1.1rem; justify-content: center; flex-wrap: wrap;
+}
+.visual-hanumankind .meta b { color: #ff3b1f; font-weight: 500; }
+
+/* -- Etheos (philosophy brand · concept) --------------------- */
+.visual-etheos {
+  background: radial-gradient(120% 120% at 50% 30%, #21201b 0%, #14130f 60%, #0c0b08 100%);
+}
+.visual-etheos .content {
+  position: absolute; inset: 0;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  z-index: 2; text-align: center; padding: 2rem;
+}
+.visual-etheos .pillars {
+  display: flex; gap: 1.6rem; margin-bottom: 1.4rem;
+  font-family: var(--serif); font-size: 1.5rem; color: #c2a878;
+}
+.visual-etheos .wordmark {
+  font-family: var(--serif);
+  font-size: clamp(2.8rem, 7.5vw, 5.2rem); letter-spacing: 0.14em; line-height: 1; color: #ece5d5;
+}
+.visual-etheos .divider { width: 56px; height: 1px; background: #c2a878; margin: 1.3rem auto; opacity: 0.6; }
+.visual-etheos .tagline {
+  font-family: var(--serif); font-style: italic;
+  font-size: 1.05rem; color: rgba(236,229,213,0.65);
+}
+.visual-etheos .greek {
+  margin-top: 1.05rem; font-family: var(--mono);
+  font-size: 0.55rem; letter-spacing: 0.22em; text-transform: uppercase; color: #9a8a68;
+}
+
+/* -- Caveat (contract intelligence) -------------------------- */
+.visual-caveat {
+  background: var(--bone);
+  background-image: repeating-linear-gradient(0deg, transparent, transparent 27px, rgba(16,15,12,0.05) 27px, rgba(16,15,12,0.05) 28px);
+}
+.visual-caveat .content {
+  position: absolute; inset: 0;
+  display: flex; flex-direction: column; justify-content: center;
+  z-index: 2; padding: clamp(1.6rem, 4.5vw, 3rem);
+}
+.visual-caveat .label {
+  font-family: var(--mono); font-size: 0.56rem;
+  letter-spacing: 0.2em; text-transform: uppercase; color: var(--mute); margin-bottom: 0.85rem;
+}
+.visual-caveat .wordmark {
+  font-family: var(--serif); font-size: clamp(2.6rem, 7vw, 4.4rem);
+  letter-spacing: -0.01em; color: var(--ink); line-height: 1; margin-bottom: 1.5rem;
+}
+.visual-caveat .clause {
+  position: relative;
+  font-size: 0.74rem; line-height: 1.65; color: #2c2820;
+  padding-left: 1rem; border-left: 2px solid rgba(16,15,12,0.12); max-width: 92%;
+}
+.visual-caveat .clause .hit {
+  background: rgba(226,84,28,0.16);
+  box-shadow: 0 0 0 1px rgba(226,84,28,0.25);
+  border-radius: 2px; padding: 0 2px;
+}
+.visual-caveat .flag {
+  position: absolute; right: 0; top: -1.55rem;
+  font-family: var(--mono); font-size: 0.5rem;
+  letter-spacing: 0.14em; text-transform: uppercase;
+  color: #fff; background: var(--saffron);
+  padding: 0.25rem 0.5rem; border-radius: 3px;
+}
+.visual-caveat .marginnote {
+  margin-top: 1.05rem; font-family: var(--mono);
+  font-size: 0.6rem; letter-spacing: 0.03em; color: var(--saffron-deep);
+}
+
+/* ============================================================
+   PROCESS SECTION
+   ============================================================ */
+.process { padding: 6rem var(--gutter) 8rem; }
+.process-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0;
+}
+@media (min-width: 900px) { .process-grid { grid-template-columns: repeat(2, 1fr); } }
+
+.process-step {
+  padding: 3rem 2rem;
+  border-top: 1px solid rgba(16,15,12,0.15);
+  position: relative;
+  transition: background 0.4s var(--ease);
+}
+.process-step:hover { background: rgba(226, 84, 28, 0.04); }
+@media (min-width: 900px) {
+  .process-step:nth-child(odd) { border-right: 1px solid rgba(16,15,12,0.15); }
+}
+.process-step .num {
+  font-family: var(--sans);
+  font-weight: 900;
+  font-size: clamp(3rem, 5vw, 4.5rem);
+  line-height: 1;
+  letter-spacing: -0.04em;
+  color: var(--saffron);
+  margin-bottom: 1.5rem;
+}
+.process-step h4 {
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: 1.8rem;
+  font-weight: 400;
+  letter-spacing: -0.02em;
+  margin-bottom: 1rem;
+  color: var(--ink);
+}
+.process-step p {
+  font-family: var(--sans);
+  font-size: 0.95rem;
+  line-height: 1.65;
+  color: var(--ink-2);
+  margin-bottom: 1rem;
+  max-width: 32rem;
+}
+.process-step .duration {
+  font-family: var(--mono);
+  font-size: 0.65rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--mute);
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 1px dashed rgba(16,15,12,0.15);
+  display: flex; justify-content: space-between;
+}
+
+/* ============================================================
+   CAPABILITIES (DARK)
+   ============================================================ */
+.capabilities {
+  background: var(--ink);
+  color: var(--paper);
+  padding: 8rem var(--gutter);
+}
+.capabilities .section-marker {
+  border-top: 0;
+  padding: 0 0 4rem;
+}
+.capabilities .section-marker .title { color: var(--paper); }
+.capabilities .section-marker .label { color: rgba(241, 235, 220, 0.5); }
+.capabilities .section-marker .meta { color: rgba(241, 235, 220, 0.5); }
+
+.cap-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0;
+}
+@media (min-width: 720px) { .cap-grid { grid-template-columns: repeat(2, 1fr); } }
+@media (min-width: 1100px) { .cap-grid { grid-template-columns: repeat(3, 1fr); } }
+
+.cap-item {
+  padding: 3rem 2rem;
+  border-top: 1px solid rgba(241, 235, 220, 0.15);
+  position: relative;
+  transition: background 0.4s var(--ease);
+}
+.cap-item:hover { background: rgba(226, 84, 28, 0.06); }
+@media (min-width: 720px) and (max-width: 1099px) {
+  .cap-item:nth-child(odd) { border-right: 1px solid rgba(241, 235, 220, 0.15); }
+}
+@media (min-width: 1100px) {
+  .cap-item:not(:nth-child(3n)) { border-right: 1px solid rgba(241, 235, 220, 0.15); }
+}
+.cap-num {
+  font-family: var(--mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.2em;
+  color: var(--saffron);
+  margin-bottom: 1rem;
+}
+.cap-title {
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: 2rem;
+  font-weight: 400;
+  letter-spacing: -0.02em;
+  margin-bottom: 1rem;
+  color: var(--paper);
+}
+.cap-body {
+  font-family: var(--sans);
+  font-size: 0.95rem;
+  line-height: 1.65;
+  color: rgba(241, 235, 220, 0.7);
+  margin-bottom: 1.2rem;
+}
+.cap-list {
+  list-style: none;
+  font-family: var(--mono);
+  font-size: 0.65rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(241, 235, 220, 0.5);
+  display: flex; flex-wrap: wrap; gap: 0.4rem;
+}
+.cap-list li::after { content: ' /'; color: var(--saffron); }
+.cap-list li:last-child::after { content: ''; }
+
+/* ============================================================
+   STACK SECTION
+   ============================================================ */
+.stack { padding: 6rem var(--gutter) 8rem; }
+.stack-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 3rem;
+  margin-top: 2rem;
+}
+@media (min-width: 900px) { .stack-grid { grid-template-columns: repeat(2, 1fr); } }
+@media (min-width: 1200px) { .stack-grid { grid-template-columns: repeat(3, 1fr); } }
+
+.stack-group {
+  padding: 2rem;
+  border: 1px solid rgba(16,15,12,0.15);
+  background: var(--paper-2);
+  transition: background 0.4s var(--ease), transform 0.4s var(--ease);
+}
+.stack-group:hover {
+  background: var(--bone);
+  transform: translateY(-3px);
+}
+.stack-group h4 {
+  font-family: var(--mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--saffron);
+  margin-bottom: 1.5rem;
+}
+.stack-group ul {
+  list-style: none;
+  display: flex; flex-direction: column; gap: 0.6rem;
+}
+.stack-group li {
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: 1.3rem;
+  letter-spacing: -0.015em;
+  color: var(--ink);
+  padding-bottom: 0.6rem;
+  border-bottom: 1px solid rgba(16,15,12,0.1);
+}
+.stack-group li:last-child { border-bottom: 0; padding-bottom: 0; }
+.stack-group li .note {
+  font-family: var(--mono);
+  font-style: normal;
+  font-size: 0.6rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--mute);
+  margin-left: 0.5rem;
+}
+
+/* ============================================================
+   WRITING SECTION
+   ============================================================ */
+.writing { padding: 6rem var(--gutter) 8rem; background: var(--paper-2); }
+.writing-list {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0;
+  margin-top: 2rem;
+  border-top: 1px solid rgba(16,15,12,0.2);
+}
+.writing-item {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  gap: 2rem;
+  padding: 2rem 0;
+  border-bottom: 1px solid rgba(16,15,12,0.15);
+  align-items: center;
+  transition: padding 0.4s var(--ease);
+}
+.writing-item:hover { padding-inline: 1rem; }
+.writing-item .date {
+  font-family: var(--mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--mute);
+  min-width: 90px;
+}
+.writing-item .title {
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: clamp(1.4rem, 2.5vw, 2rem);
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+  color: var(--ink);
+}
+.writing-item .arrow {
+  font-family: var(--mono);
+  font-size: 1.2rem;
+  color: var(--saffron);
+  transition: transform 0.3s var(--ease);
+}
+.writing-item:hover .arrow { transform: translateX(8px); }
+@media (max-width: 720px) {
+  .writing-item { grid-template-columns: 1fr; gap: 0.5rem; padding: 1.5rem 0; }
+  .writing-item .arrow { display: none; }
+}
+
+/* ============================================================
+   ENGAGEMENT MODEL
+   ============================================================ */
+.engagement { padding: 6rem var(--gutter) 8rem; }
+.eng-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 2rem;
+  margin-top: 2rem;
+}
+@media (min-width: 900px) { .eng-grid { grid-template-columns: repeat(3, 1fr); } }
+
+.eng-card {
+  padding: 2.5rem 2rem;
+  border: 1px solid var(--ink);
+  background: var(--paper);
+  display: flex; flex-direction: column;
+  transition: background 0.4s var(--ease), color 0.4s var(--ease), transform 0.4s var(--ease);
+  position: relative;
+  overflow: hidden;
+}
+.eng-card:hover {
+  background: var(--ink);
+  color: var(--paper);
+  transform: translateY(-4px);
+}
+.eng-card:hover .eng-num { color: var(--saffron); }
+.eng-card:hover .eng-title { color: var(--paper); }
+.eng-card:hover .eng-desc { color: rgba(241, 235, 220, 0.7); }
+.eng-card:hover .eng-list li { border-color: rgba(241, 235, 220, 0.2); color: rgba(241, 235, 220, 0.8); }
+.eng-card:hover .eng-cta { color: var(--saffron); border-color: var(--saffron); }
+.eng-card.featured {
+  background: var(--saffron);
+  color: var(--ink);
+  border-color: var(--saffron);
+}
+.eng-card.featured:hover { background: var(--saffron-deep); transform: translateY(-4px); color: var(--ink); }
+.eng-card.featured .eng-num,
+.eng-card.featured .eng-title { color: var(--ink); }
+
+.eng-num {
+  font-family: var(--mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--saffron);
+  margin-bottom: 1.5rem;
+  transition: color 0.4s var(--ease);
+}
+.eng-title {
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: 2.2rem;
+  font-weight: 400;
+  line-height: 1;
+  letter-spacing: -0.02em;
+  margin-bottom: 0.5rem;
+}
+.eng-price {
+  font-family: var(--mono);
+  font-size: 0.78rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  margin-bottom: 1.5rem;
+}
+.eng-desc {
+  font-family: var(--sans);
+  font-size: 0.95rem;
+  line-height: 1.6;
+  margin-bottom: 1.5rem;
+  flex: 1;
+}
+.eng-list {
+  list-style: none;
+  margin-bottom: 2rem;
+}
+.eng-list li {
+  font-family: var(--sans);
+  font-size: 0.85rem;
+  padding: 0.6rem 0;
+  border-top: 1px solid rgba(16,15,12,0.15);
+  display: flex; align-items: start; gap: 0.6rem;
+  transition: color 0.4s var(--ease), border-color 0.4s var(--ease);
+}
+.eng-list li::before {
+  content: '·';
+  color: var(--saffron);
+  font-weight: 700;
+  flex-shrink: 0;
+}
+.eng-cta {
+  font-family: var(--mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  padding-bottom: 4px;
+  border-bottom: 1px solid currentColor;
+  align-self: flex-start;
+  transition: color 0.3s var(--ease), border-color 0.3s var(--ease), gap 0.3s var(--ease);
+  display: inline-flex; align-items: center; gap: 0.6rem;
+}
+.eng-cta::after { content: '→'; }
+.eng-cta:hover { gap: 1rem; }
+
+/* ============================================================
+   FAQ
+   ============================================================ */
+.faq { padding: 6rem var(--gutter) 8rem; background: var(--ink); color: var(--paper); }
+.faq .section-marker { padding: 0 0 4rem; border-top: 0; }
+.faq .section-marker .title { color: var(--paper); }
+.faq .section-marker .label { color: rgba(241,235,220,0.5); }
+.faq .section-marker .meta { color: rgba(241,235,220,0.5); }
+
+.faq-list { border-top: 1px solid rgba(241, 235, 220, 0.2); }
+.faq-item {
+  border-bottom: 1px solid rgba(241, 235, 220, 0.2);
+}
+.faq-question {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 2rem 0;
+  width: 100%;
+  text-align: left;
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: clamp(1.3rem, 2.5vw, 1.8rem);
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+  color: var(--paper);
+  transition: color 0.3s var(--ease);
+}
+.faq-question:hover { color: var(--saffron); }
+.faq-question .plus {
+  flex-shrink: 0;
+  width: 24px; height: 24px;
+  position: relative;
+  margin-left: 2rem;
+}
+.faq-question .plus::before,
+.faq-question .plus::after {
+  content: '';
+  position: absolute;
+  background: var(--saffron);
+  top: 50%; left: 50%;
+}
+.faq-question .plus::before {
+  width: 16px; height: 1.5px;
+  transform: translate(-50%, -50%);
+}
+.faq-question .plus::after {
+  width: 1.5px; height: 16px;
+  transform: translate(-50%, -50%);
+  transition: transform 0.3s var(--ease);
+}
+.faq-item.open .faq-question .plus::after { transform: translate(-50%, -50%) rotate(90deg); }
+
+.faq-answer {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.5s var(--ease);
+}
+.faq-item.open .faq-answer { max-height: 500px; }
+.faq-answer-inner {
+  padding-bottom: 2rem;
+  font-family: var(--sans);
+  font-size: 1rem;
+  line-height: 1.7;
+  color: rgba(241, 235, 220, 0.75);
+  max-width: 48rem;
+}
+
+/* ============================================================
+   CONTACT
+   ============================================================ */
+.contact {
+  padding: 10rem var(--gutter) 6rem;
+  position: relative;
+}
+.contact .label {
+  font-family: var(--mono);
+  font-size: 0.78rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--saffron);
+  margin-bottom: 2rem;
+}
+.contact h2 {
+  font-family: var(--serif);
+  font-style: italic;
+  font-weight: 400;
+  font-size: clamp(3rem, 11vw, 11rem);
+  line-height: 0.88;
+  letter-spacing: -0.04em;
+  margin-bottom: 3rem;
+  color: var(--ink);
+}
+.contact h2 .accent { color: var(--saffron); }
+.contact-email {
+  display: inline-block;
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: clamp(2rem, 6vw, 5rem);
+  color: var(--ink);
+  padding-bottom: 0.5rem;
+  border-bottom: 2px solid var(--ink);
+  transition: color 0.3s var(--ease), border-color 0.3s var(--ease);
+  letter-spacing: -0.02em;
+}
+.contact-email:hover { color: var(--saffron); border-color: var(--saffron); }
+
+.contact-meta {
+  margin-top: 4rem;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 2.5rem;
+  max-width: 48rem;
+}
+@media (min-width: 720px) { .contact-meta { grid-template-columns: repeat(2, 1fr); } }
+.contact-meta-item h5 {
+  font-family: var(--mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--mute);
+  margin-bottom: 0.6rem;
+}
+.contact-meta-item p {
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: 1.25rem;
+  line-height: 1.4;
+  color: var(--ink);
+}
+
+.channels {
+  margin-top: 4rem;
+  display: flex; gap: 2.5rem; flex-wrap: wrap;
+  font-family: var(--mono);
+  font-size: 0.75rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+}
+.channels a {
+  position: relative;
+  padding-bottom: 4px;
+  border-bottom: 1px solid transparent;
+  transition: border-color 0.3s, color 0.3s;
+}
+.channels a:hover { border-color: var(--saffron); color: var(--saffron); }
+
+/* ============================================================
+   NEWSLETTER
+   ============================================================ */
+.newsletter {
+  padding: 6rem var(--gutter);
+  background: var(--saffron);
+  color: var(--ink);
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 3rem;
+  align-items: center;
+}
+@media (min-width: 900px) { .newsletter { grid-template-columns: 1fr 1fr; } }
+.newsletter h3 {
+  font-family: var(--serif);
+  font-style: italic;
+  font-weight: 400;
+  font-size: clamp(2rem, 5vw, 3.5rem);
+  line-height: 1;
+  letter-spacing: -0.025em;
+}
+.newsletter p {
+  font-family: var(--sans);
+  font-size: 1rem;
+  line-height: 1.6;
+  max-width: 28rem;
+  margin-top: 1rem;
+}
+.nl-form {
+  display: flex;
+  align-items: center;
+  background: var(--paper);
+  border: 1.5px solid var(--ink);
+  padding: 0.5rem 0.5rem 0.5rem 1.5rem;
+}
+.nl-form input {
+  flex: 1;
+  font: inherit;
+  font-family: var(--sans);
+  font-size: 1rem;
+  border: 0; background: transparent;
+  padding: 0.75rem 0;
+  color: var(--ink);
+  outline: none;
+}
+.nl-form input::placeholder { color: var(--mute); }
+.nl-form button {
+  font-family: var(--mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  background: var(--ink);
+  color: var(--paper);
+  padding: 0.85rem 1.5rem;
+  transition: background 0.3s var(--ease);
+}
+.nl-form button:hover { background: var(--saffron-deep); }
+
+.newsletter-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  align-items: center;
+}
+.newsletter-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  background: var(--ink);
+  color: var(--paper);
+  border: 1.5px solid var(--ink);
+  padding: 1rem 1.35rem;
+  transition: background 0.3s var(--ease), color 0.3s var(--ease);
+}
+.newsletter-link:hover { background: var(--saffron-deep); }
+.newsletter-link.secondary { background: transparent; color: var(--ink); }
+.newsletter-link.secondary:hover { background: var(--ink); color: var(--paper); }
+
+/* ============================================================
+   FOOTER
+   ============================================================ */
+footer {
+  background: var(--ink);
+  color: var(--paper);
+  padding: 5rem var(--gutter) 2rem;
+}
+.footer-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 3rem;
+  padding-bottom: 4rem;
+  border-bottom: 1px solid rgba(241, 235, 220, 0.2);
+}
+@media (min-width: 720px) { .footer-grid { grid-template-columns: 2fr 1fr 1fr 1fr; } }
+
+.footer-brand h4 {
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: clamp(2.5rem, 5vw, 4rem);
+  line-height: 1;
+  letter-spacing: -0.03em;
+  margin-bottom: 1rem;
+}
+.footer-brand h4 .dot { color: var(--saffron); }
+.footer-brand p {
+  font-family: var(--sans);
+  font-size: 0.9rem;
+  line-height: 1.6;
+  color: rgba(241,235,220,0.7);
+  max-width: 22rem;
+}
+.footer-col h5 {
+  font-family: var(--mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--saffron);
+  margin-bottom: 1rem;
+}
+.footer-col ul {
+  list-style: none;
+  display: flex; flex-direction: column; gap: 0.6rem;
+  font-family: var(--sans);
+  font-size: 0.9rem;
+}
+.footer-col li a {
+  color: rgba(241,235,220,0.7);
+  transition: color 0.3s;
+}
+.footer-col li a:hover { color: var(--saffron); }
+
+.footer-base {
+  padding-top: 2rem;
+  display: flex; justify-content: space-between; align-items: center;
+  flex-wrap: wrap; gap: 1rem;
+  font-family: var(--mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(241, 235, 220, 0.5);
+}
+.footer-base .deva {
+  font-family: var(--deva);
+  font-weight: 700;
+  color: var(--saffron);
+  font-size: 0.95rem;
+  text-transform: none;
+  letter-spacing: 0;
+}
+
+/* ============================================================
+   SCROLL REVEALS
+   ============================================================ */
+.reveal-up {
+  opacity: 0;
+  transform: translateY(40px);
+  transition: opacity 1s var(--ease-out), transform 1s var(--ease-out);
+}
+.reveal-up.in { opacity: 1; transform: translateY(0); }
+
+/* ============================================================
+   MOBILE
+   ============================================================ */
+@media (max-width: 720px) {
+  .stats { grid-template-columns: 1fr 1fr; gap: 1.5rem; }
+  .hero-name { font-size: 5rem; }
+  .section-marker { padding: 4rem var(--gutter) 2rem; }
+  .work-section { padding: 0 var(--gutter) 4rem; }
+  .showcase { padding: 2rem 0; }
+  .process-step { padding: 2rem 1rem; }
+  .cap-item { padding: 2rem 1.5rem; }
+  .marquee.tilt, .marquee.tilt-reverse { transform: none; margin: 0; width: 100%; }
+}
+/* ============================================================
+   ACCESSIBILITY: REDUCED MOTION
+   ============================================================ */
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+  .marquee-track,
+  .visual-vidurneeti .flower,
+  .visual-vanta .scan {
+    animation: none !important;
+  }
+}
+
+</style>
+</head>
+<body>
+<!-- LOADER -->
+<div class="loader">
+<div class="loader-top">
+<span>Namish Studio</span>
+<span>2026</span>
+</div>
+<div class="loader-bar"></div>
+<div class="loader-name">
+<span>N</span><span>A</span><span>M</span><span>I</span><span>S</span><span>H</span>
+</div>
+<div class="loader-counter">Loading · <span id="loadPct">000</span> / 100</div>
+</div>
+<!-- CUSTOM CURSOR -->
+<div class="cursor"></div>
+<div class="cursor-ring"></div>
+<!-- NAV -->
+<nav aria-label="Primary navigation" class="site-nav nav-at-top" id="siteNav">
+<div class="left">
+<a class="brand-link" href="#top">Namish<span style="color:var(--saffron)">.</span></a>
+<span class="clock hide-mobile" id="clock">—— IST</span>
+</div>
+<button aria-controls="primaryNavLinks" aria-expanded="false" aria-label="Open navigation menu" class="nav-toggle" id="navToggle" type="button">
+<span>Menu</span><span aria-hidden="true" class="nav-toggle-lines"></span>
+</button>
+<div class="right" id="primaryNavLinks">
+<a href="#work">Work</a>
+<a href="#process">Process</a>
+<a href="#capabilities">Studio</a>
+<a href="#writing">Writing</a>
+<a href="#contact">Contact</a>
+<span class="availability"><span class="dot"></span> Booking Q3</span>
+</div>
+</nav>
+<!-- HERO -->
+<header class="hero" id="top">
+<div class="hero-coords">31.32° N · 75.58° E · Ludhiana</div>
+<div class="hero-grid">
+<div>
+<p class="hero-intro">Independent Studio · Est. 2024</p>
+<p class="hero-statement">
+        I design and build for brands that take <span class="accent">their subject matter</span> seriously — luxury Indian houses, dharmic publishers, premium D2C makers, considered editorial.
+      </p>
+</div>
+<div class="hero-meta">
+<span>Available Q3 2026</span>
+<span>Selective engagement</span>
+<span>End-to-end craft</span>
+<span>Based in Ludhiana · Working globally</span>
+<span class="available">Currently booking new projects</span>
+</div>
+</div>
+<h1 class="hero-name">
+    Namish<span class="dot">.</span><span class="deva">नमिश्</span>
+</h1>
+<div class="hero-scroll">Scroll</div>
+</header>
+<!-- MARQUEE BAND 1 -->
+<div class="marquee tilt">
+<div class="marquee-track">
+<span>Luxury Jewellery <span class="star">✦</span> Cookware D2C <span class="star">✦</span> Glassmorphic UI <span class="star">✦</span> Dharmic Apps <span class="star">✦</span> Editorial Brand <span class="star">✦</span> Kinetic Typography <span class="star">✦</span> Sanskrit Devanagari <span class="star">✦</span> Premium E-commerce <span class="star">✦</span></span>
+<span aria-hidden="true">Luxury Jewellery <span class="star">✦</span> Cookware D2C <span class="star">✦</span> Glassmorphic UI <span class="star">✦</span> Dharmic Apps <span class="star">✦</span> Editorial Brand <span class="star">✦</span> Kinetic Typography <span class="star">✦</span> Sanskrit Devanagari <span class="star">✦</span> Premium E-commerce <span class="star">✦</span></span>
+</div>
+</div>
+<!-- INDEX -->
+<section class="index">
+<div class="index-text reveal-up">
+    A one-person studio building the kind of websites and applications that <span class="accent">most agencies cannot</span> — because the brand is too specific, the references are too deep, or the timeline is too short. <strong>Independent. End-to-end. Quietly serious.</strong>
+</div>
+<div class="stats">
+<div class="reveal-up">
+<div class="stat-num" data-count="12">00<span class="small">+</span></div>
+<div class="stat-label">Brands built end-to-end</div>
+</div>
+<div class="reveal-up">
+<div class="stat-num" data-count="6">00<span class="small">/</span></div>
+<div class="stat-label">Apps shipped this year</div>
+</div>
+<div class="reveal-up">
+<div class="stat-num" data-count="4">00<span class="small">★</span></div>
+<div class="stat-label">Live D2C storefronts</div>
+</div>
+<div class="reveal-up">
+<div class="stat-num">∞</div>
+<div class="stat-label">Devanagari ligatures rendered</div>
+</div>
+</div>
+</section>
+<!-- WORK SECTION MARKER -->
+<div class="section-marker" id="work">
+<div>
+<div class="label">02 · Selected Work</div>
+<div class="title">Recently <em class="accent">Shipped.</em></div>
+</div>
+<div class="meta">
+    2024 — 2026<br/>
+    Thirteen projects<br/>
+    Across categories
+  </div>
+</div>
+<!-- WORK SHOWCASES -->
+<section class="work-section">
+<!-- 001 — Nivaratnam -->
+<div class="showcase reveal-up" id="case-nivaratnam">
+<div class="showcase-info">
+<div class="showcase-num">001 / Luxury Jewellery</div>
+<h3 class="showcase-title">Nivaratnam</h3>
+<p class="showcase-deva">निवारत्नम् · जागरण के आभूषण</p>
+<p class="showcase-desc">A luxury Indian jewellery house positioned around dharmic iconography and Sanskrit-rooted naming. Designed an ivory-and-gold visual system rooted in Indian heritage aesthetics, built the full storefront, integrated the catalogue from inventory through checkout, and shipped a Python-based lookbook generator that turns SKU data into editorial-grade compositions in minutes rather than days.</p><ul class="case-results"><li>Built a premium jewellery brand system with Sanskrit-rooted naming and ivory-gold visual language.</li><li>Structured product storytelling for high-ticket, trust-led jewellery buying.</li><li>Added a lookbook pipeline to turn SKU data into editorial-style assets quickly.</li></ul>
+<dl class="showcase-credits">
+<dt>Year</dt><dd>2024 — Ongoing</dd>
+<dt>Role</dt><dd>Design + Build</dd>
+<dt>Stack</dt><dd>React · Tailwind · Python · Pillow</dd>
+<dt>Range</dt><dd>₹45K — ₹8.5L</dd>
+</dl>
+<div class="showcase-tags">
+<span class="tag">Brand Identity</span>
+<span class="tag">E-commerce</span>
+<span class="tag">Lookbook Engine</span>
+<span class="tag">AI Imagery</span>
+</div>
+<a class="showcase-cta" href="#contact">Discuss Similar Project</a>
+</div>
+<div class="showcase-visual visual-nivaratnam">
+<div class="orb orb-1"></div>
+<div class="orb orb-2"></div>
+<div class="orb orb-3"></div>
+<div class="content">
+<p class="label">Indian House of Jewellery</p>
+<h4 class="wordmark">Nivaratnam</h4>
+<div class="divider"></div>
+<p class="deva">जागरण के आभूषण</p>
+</div>
+</div>
+</div>
+<!-- 002 — Steelica -->
+<div class="showcase reverse reveal-up" id="case-steelica">
+<div class="showcase-info">
+<div class="showcase-num">002 / D2C Cookware</div>
+<h3 class="showcase-title">Steelica</h3>
+<p class="showcase-desc">Triply stainless steel cookware brand with deep roots in Ludhiana's industrial heritage. Designed a cinematic black-red-white visual system, ran the full e-commerce build, and produced packaging artwork through a custom Python rendering pipeline that turns every SKU into a print-ready box layout. The site lives in the same register as the product — heavy, honest, made to last.</p><ul class="case-results"><li>Created a cinematic black-red-white D2C identity for tri-ply cookware.</li><li>Turned manufacturing credibility into product-page trust signals.</li><li>Aligned website and packaging direction under one coherent product system.</li></ul>
+<dl class="showcase-credits">
+<dt>Year</dt><dd>2024 — Ongoing</dd>
+<dt>Role</dt><dd>Design + Build + Print</dd>
+<dt>Stack</dt><dd>React · Tailwind · Python · ReportLab</dd>
+<dt>Output</dt><dd>Web + Packaging</dd>
+</dl>
+<div class="showcase-tags">
+<span class="tag">Brand Identity</span>
+<span class="tag">E-commerce</span>
+<span class="tag">Packaging Design</span>
+<span class="tag">Print Pipeline</span>
+</div>
+<a class="showcase-cta" href="#contact">Discuss Similar Project</a>
+</div>
+<div class="showcase-visual visual-steelica">
+<div class="hex-mark"></div>
+<div class="content">
+<p class="label">Triply · Stainless · Cookware</p>
+<h4 class="wordmark">Steel<span class="ica">ica</span></h4>
+<div class="bar"></div>
+<span class="tag-line">Cook Well · Cook Pro</span>
+</div>
+</div>
+</div>
+<!-- 003 — Sutra -->
+<div class="showcase reveal-up" id="case-sutra">
+<div class="showcase-info">
+<div class="showcase-num">003 / Application</div>
+<h3 class="showcase-title">Sutra</h3>
+<p class="showcase-desc">A notes and journaling application built around an ultra-premium glassmorphism aesthetic. Animated aurora background with cosmic gradients, frosted-glass entry panels with layered transparency, mood tagging across six emotional states, full-text search, smart organisation across five collections, and an offline-first PWA architecture. v2 shipped with complete responsive surface and a refined editor experience.</p><ul class="case-results"><li>Shipped an offline-first PWA notes experience with mood tagging and responsive editing.</li><li>Created a distinctive glassmorphic interface instead of a generic dashboard.</li><li>Balanced visual richness with practical search, collections, and fast capture.</li></ul>
+<dl class="showcase-credits">
+<dt>Year</dt><dd>2026</dd>
+<dt>Role</dt><dd>Design + Build</dd>
+<dt>Stack</dt><dd>React · Vite · CSS-in-JS</dd>
+<dt>Architecture</dt><dd>Offline-first PWA</dd>
+</dl>
+<div class="showcase-tags">
+<span class="tag">React</span>
+<span class="tag">PWA</span>
+<span class="tag">Glassmorphism</span>
+<span class="tag">Offline-first</span>
+</div>
+<a class="showcase-cta" href="#contact">Discuss Similar Project</a>
+</div>
+<div class="showcase-visual visual-sutra">
+<div class="blob blob-1"></div>
+<div class="blob blob-2"></div>
+<div class="blob blob-3"></div>
+<div class="content">
+<div class="glass">
+<div class="mood"><span class="dot"></span> Inspired · 13 Feb</div>
+<div class="entry-title">Morning Reflections</div>
+<div class="entry-body">The dawn light filtered through the curtains today, casting golden patterns across the room. There's something profoundly calming about those first moments…</div>
+</div>
+</div>
+</div>
+</div>
+<!-- 004 — VidurNeeti -->
+<div class="showcase reverse reveal-up" id="case-vidurneeti">
+<div class="showcase-info">
+<div class="showcase-num">004 / Editorial Identity</div>
+<h3 class="showcase-title">VidurNeeti</h3>
+<p class="showcase-deva">विदुरनीति · Strategy · Statecraft · Signal</p>
+<p class="showcase-desc">Visual system and intro animation for a long-form geopolitics channel covering Indian statecraft and civilizational analysis. Gold Martel Devanagari on pure black, Flower of Life and Shankha motifs, an expanding-wave bindu animation built in Python with Pillow and ffmpeg encoding. The full visual identity reads as both ancient and contemporary — sacred geometry rendered with the precision of a modern editorial brand.</p><ul class="case-results"><li>Established a serious black-gold identity for statecraft and civilisational analysis.</li><li>Created Devanagari-first animation direction with a strong editorial register.</li><li>Built a reusable visual grammar for long-form geopolitical content.</li></ul>
+<dl class="showcase-credits">
+<dt>Year</dt><dd>2024 — Ongoing</dd>
+<dt>Role</dt><dd>Brand + Motion + Type</dd>
+<dt>Stack</dt><dd>Python · Pillow · ffmpeg</dd>
+<dt>Type</dt><dd>Martel-Bold Devanagari</dd>
+</dl>
+<div class="showcase-tags">
+<span class="tag">Brand Identity</span>
+<span class="tag">Motion Design</span>
+<span class="tag">Python · Pillow</span>
+<span class="tag">Devanagari</span>
+</div>
+<a class="showcase-cta" href="#contact">Discuss Similar Project</a>
+</div>
+<div class="showcase-visual visual-vidurneeti">
+<span class="corner">FoL · 2024</span>
+<svg aria-hidden="true" class="flower" viewbox="0 0 200 200">
+<g fill="none" stroke="#c9a049" stroke-width="0.6">
+<circle cx="100" cy="100" r="30"></circle>
+<circle cx="100" cy="70" r="30"></circle>
+<circle cx="100" cy="130" r="30"></circle>
+<circle cx="126" cy="85" r="30"></circle>
+<circle cx="126" cy="115" r="30"></circle>
+<circle cx="74" cy="85" r="30"></circle>
+<circle cx="74" cy="115" r="30"></circle>
+<circle cx="100" cy="40" r="30"></circle>
+<circle cx="100" cy="160" r="30"></circle>
+<circle cx="152" cy="70" r="30"></circle>
+<circle cx="152" cy="130" r="30"></circle>
+<circle cx="48" cy="70" r="30"></circle>
+<circle cx="48" cy="130" r="30"></circle>
+<circle cx="100" cy="100" opacity="0.6" r="88" stroke-width="0.4"></circle>
+<circle cx="100" cy="100" fill="#c9a049" r="2.5" stroke="none"></circle>
+</g>
+</svg>
+<div class="content">
+<p class="deva-big">विदुरनीति</p>
+<p class="tagline-text">Strategy · Statecraft · Signal</p>
+</div>
+</div>
+</div>
+<!-- 005 — Gita Daily -->
+<div class="showcase reveal-up" id="case-gita-daily">
+<div class="showcase-info">
+<div class="showcase-num">005 / Dharmic Application</div>
+<h3 class="showcase-title">Gita Daily</h3>
+<p class="showcase-deva">गीता प्रतिदिनम्</p>
+<p class="showcase-desc">A daily Bhagavad Gītā reader designed for slow, attentive engagement with primary text. Each verse shows śloka, transliteration, word-by-word breakdown, and commentary in stacked layers that the reader controls. Built for readers who care about the language and lineage, not the aesthetic gloss most spiritual apps default to. Type is set with manuscript discipline — every Devanagari ligature checked.</p><ul class="case-results"><li>Built a devotional product surface around daily verse discovery.</li><li>Combined Devanagari typography, calm UX, and shareable spiritual moments.</li><li>Designed for retention through ritual rather than notification spam.</li></ul>
+<dl class="showcase-credits">
+<dt>Year</dt><dd>2025</dd>
+<dt>Role</dt><dd>Design + Build</dd>
+<dt>Stack</dt><dd>React · Sanskrit data layer</dd>
+<dt>Focus</dt><dd>Long-form reading</dd>
+</dl>
+<div class="showcase-tags">
+<span class="tag">Application</span>
+<span class="tag">Sanskrit Typography</span>
+<span class="tag">Reading Experience</span>
+<span class="tag">Manuscript Tradition</span>
+</div>
+<a class="showcase-cta" href="#contact">Discuss Similar Project</a>
+</div>
+<div class="showcase-visual visual-gita">
+<div class="content">
+<p class="verse">कर्मण्येवाधिकारस्ते<br/>मा फलेषु कदाचन ॥</p>
+<div class="flourish"></div>
+<p class="cite">Bhagavad Gītā · 2 · 47</p>
+</div>
+</div>
+</div>
+<!-- 006 — Japa Counter -->
+<div class="showcase reverse reveal-up" id="case-japa-counter">
+<div class="showcase-info">
+<div class="showcase-num">006 / Sacred Tool</div>
+<h3 class="showcase-title">Japa Counter</h3>
+<p class="showcase-deva">जपगणक</p>
+<p class="showcase-desc">A meditation counter PWA designed around a single physical gesture — one tap per bead, 108 beads per round, 16 rounds per daily goal. Visualised mala, round tracking, session timing. Offline, fast, quiet — installs to home screen like a native app. Designed in the same register as the practice itself, meaning no notifications, no streaks, no gamification. Just the count, the mantra, and the silence around them.</p><ul class="case-results"><li>Created a focused chanting counter with a mala-inspired interface.</li><li>Kept the devotional UX tactile without visual clutter.</li><li>Made the app suitable for repeated daily practice rather than novelty use.</li></ul>
+<dl class="showcase-credits">
+<dt>Year</dt><dd>2025</dd>
+<dt>Role</dt><dd>Design + Build</dd>
+<dt>Stack</dt><dd>React · iOS Add-to-Home</dd>
+<dt>Philosophy</dt><dd>Anti-gamification</dd>
+</dl>
+<div class="showcase-tags">
+<span class="tag">PWA</span>
+<span class="tag">React</span>
+<span class="tag">Minimal UI</span>
+<span class="tag">Single Gesture</span>
+</div>
+<a class="showcase-cta" href="#contact">Discuss Similar Project</a>
+</div>
+<div class="showcase-visual visual-japa">
+<div class="mala">
+<svg aria-hidden="true" class="mala-svg" viewbox="0 0 240 240">
+<circle cx="120" cy="120" fill="none" opacity="0.6" r="92" stroke="#d6c9a8" stroke-width="0.8"></circle>
+<g id="mala-beads-v2"></g>
+</svg>
+</div>
+<div class="content">
+<p class="count">108</p>
+<p class="mantra">Hare Kṛṣṇa</p>
+</div>
+</div>
+</div>
+<!-- 007 — Niches -->
+<div class="showcase reveal-up" id="case-niches">
+<div class="showcase-info">
+<div class="showcase-num">007 / Product · Web App</div>
+<h3 class="showcase-title">Niches</h3>
+<p class="showcase-desc">A market-opportunity terminal that scores any niche across four axes — demand, competition, monetization and momentum — then returns a plain-English verdict on whether to build it and exactly where the wedge sits. Designed as a command-line interface in the browser: keyboard-driven, monospace, instant. The whole product reads like a Bloomberg terminal for indie founders rather than another dashboard.</p><ul class="case-results"><li>Turned fuzzy niche research into a four-axis scoring model.</li><li>Used terminal-style interaction to make founder research feel fast and decisive.</li><li>Shipped a live browser demo with a clear build-or-skip verdict.</li></ul>
+<dl class="showcase-credits">
+<dt>Year</dt><dd>2026</dd>
+<dt>Role</dt><dd>Design + Build</dd>
+<dt>Stack</dt><dd>HTML · CSS · JavaScript</dd>
+<dt>Interface</dt><dd>Keyboard-first terminal</dd>
+</dl>
+<div class="showcase-tags">
+<span class="tag">Product</span>
+<span class="tag">Terminal UI</span>
+<span class="tag">Scoring Engine</span>
+<span class="tag">Founder Tool</span>
+</div>
+<a class="showcase-cta" href="https://niamish.github.io/Niches/" rel="noopener" target="_blank">Visit Live Site</a>
+</div>
+<div class="showcase-visual visual-niches">
+<div class="content">
+<div class="term-top"><span class="led"></span> opportunity index · live</div>
+<div class="prompt"><span class="cmd">niches_</span> ai resume builder<span class="caret"></span></div>
+<div class="scores">
+<div class="score-row"><span>Demand</span><span class="meter"><i style="width:88%"></i></span><b>88</b></div>
+<div class="score-row"><span>Competition</span><span class="meter"><i style="width:41%"></i></span><b>41</b></div>
+<div class="score-row"><span>Monetization</span><span class="meter"><i style="width:76%"></i></span><b>76</b></div>
+<div class="score-row"><span>Momentum</span><span class="meter"><i style="width:92%"></i></span><b>92</b></div>
+</div>
+<span class="verdict">▸ Build it — clear wedge</span>
+</div>
+</div>
+</div>
+<!-- 008 — Lumis -->
+<div class="showcase reverse reveal-up" id="case-lumis">
+<div class="showcase-info">
+<div class="showcase-num">008 / Luxury Brand · Concept</div>
+<h3 class="showcase-title">Lumis</h3>
+<p class="showcase-desc">A concept site for a luxury atelier of heirloom objects, built around the idea that the things worth keeping are the things made to outlive us. Obsidian-and-gold palette, cinematic scroll, a typography-scramble decode effect on hover, and animated count-up statistics. The register is deliberately patient — every section asks the visitor to slow down before it reveals itself.</p><ul class="case-results"><li>Explored luxury pacing through slow reveals, obsidian-gold contrast, and editorial copy.</li><li>Created a concept brand that feels established rather than template-made.</li><li>Used motion as atmosphere, not decoration.</li></ul>
+<dl class="showcase-credits">
+<dt>Year</dt><dd>2024</dd>
+<dt>Role</dt><dd>Design + Build</dd>
+<dt>Stack</dt><dd>HTML · CSS · JavaScript</dd>
+<dt>Type</dt><dd>Concept · Demo</dd>
+</dl>
+<div class="showcase-tags">
+<span class="tag">Brand Concept</span>
+<span class="tag">Luxury</span>
+<span class="tag">Scroll Motion</span>
+<span class="tag">Text Animation</span>
+</div>
+<a class="showcase-cta" href="https://niamish.github.io/Lumis-Demo/" rel="noopener" target="_blank">Visit Live Site</a>
+</div>
+<div class="showcase-visual visual-lumis">
+<div class="content">
+<div class="glyph">◈</div>
+<p class="label">Est. 2024 · The New Standard</p>
+<h4 class="wordmark">LUMIS</h4>
+<div class="divider"></div>
+<p class="tagline">Where craft becomes legend</p>
+</div>
+</div>
+</div>
+<!-- 009 — Vanta -->
+<div class="showcase reveal-up" id="case-vanta">
+<div class="showcase-info">
+<div class="showcase-num">009 / Defence · Fictional Concept</div>
+<h3 class="showcase-title">Vanta</h3>
+<p class="showcase-desc">A fictional concept site for a sovereign hypersonic-systems company — an exercise in designing for a register most studios never touch: classified, tactical, operational. Boot-sequence loader, live-telemetry HUD, monospace clearance headers, a three-platform capability matrix and a flagship spec sheet. Entirely invented; the brief was to make a defence contractor's interface feel real enough to be unsettling.</p><ul class="case-results"><li>Built a fictional tactical interface with boot sequence, HUD language, and spec-led content.</li><li>Showed range beyond lifestyle and D2C categories.</li><li>Designed a convincing defence-tech mood without using real sensitive claims.</li></ul>
+<dl class="showcase-credits">
+<dt>Year</dt><dd>2026</dd>
+<dt>Role</dt><dd>Design + Build</dd>
+<dt>Stack</dt><dd>HTML · CSS · JavaScript</dd>
+<dt>Type</dt><dd>Fictional · Concept</dd>
+</dl>
+<div class="showcase-tags">
+<span class="tag">Concept</span>
+<span class="tag">Tactical UI</span>
+<span class="tag">HUD · Telemetry</span>
+<span class="tag">Defence</span>
+</div>
+<a class="showcase-cta" href="https://niamish.github.io/Defence-Site-CONCEPT-FICTIONAL-/" rel="noopener" target="_blank">Visit Live Site</a>
+</div>
+<div class="showcase-visual visual-vanta">
+<div class="scan"></div>
+<div class="reticle">
+<svg aria-hidden="true" viewbox="0 0 200 200">
+<g fill="none" stroke="#ff6b1a" stroke-width="0.8">
+<circle cx="100" cy="100" opacity="0.5" r="78"></circle>
+<circle cx="100" cy="100" opacity="0.7" r="52"></circle>
+<circle cx="100" cy="100" fill="#ff6b1a" r="3" stroke="none"></circle>
+<line x1="100" x2="100" y1="6" y2="42"></line>
+<line x1="100" x2="100" y1="158" y2="194"></line>
+<line x1="6" x2="42" y1="100" y2="100"></line>
+<line x1="158" x2="194" y1="100" y2="100"></line>
+</g>
+</svg>
+</div>
+<div class="hud-tl">SYS_ID: VNT-87.2<br/>UPLINK · STABLE</div>
+<div class="hud-br">CLEARANCE<br/>TIER-3</div>
+<div class="content">
+<div class="mach">Mach <span>12.4</span></div>
+<div class="sub">Boost-Glide · Below Horizon</div>
+<div class="status">● Field-Deployed</div>
+</div>
+</div>
+</div>
+<!-- 010 — Brodha V -->
+<div class="showcase reverse reveal-up" id="case-brodha-v">
+<div class="showcase-info">
+<div class="showcase-num">010 / Artist Site · Concept</div>
+<h3 class="showcase-title">Brodha V</h3>
+<p class="showcase-desc">A concept artist site for one of the pioneers of Indian hip-hop, built where mythology meets the street. Heavy condensed type, a dark stage-lit palette, scroll-reveal discography, a video wall and tour routing. The design holds two registers at once — the sacred source material and the swagger of the genre — without letting either flatten the other.</p><ul class="case-results"><li>Merged mythological references with contemporary hip-hop visual language.</li><li>Used heavy type, tour surfaces, and video-wall pacing to create artist-site energy.</li><li>Framed the project clearly as a concept/fan build.</li></ul>
+<dl class="showcase-credits">
+<dt>Year</dt><dd>2026</dd>
+<dt>Role</dt><dd>Design + Build</dd>
+<dt>Stack</dt><dd>HTML · CSS · JavaScript</dd>
+<dt>Type</dt><dd>Concept · Fan Build</dd>
+</dl>
+<div class="showcase-tags">
+<span class="tag">Artist Site</span>
+<span class="tag">Music</span>
+<span class="tag">Concept</span>
+<span class="tag">Scroll Motion</span>
+</div>
+<a class="showcase-cta" href="https://niamish.github.io/BRODDA-V-CONCEPT-SITE/" rel="noopener" target="_blank">Visit Live Site</a>
+</div>
+<div class="showcase-visual visual-brodhav">
+<div class="content">
+<div class="om">॥ ॐ ॥</div>
+<h4 class="wordmark">Brodha <span>V</span></h4>
+<p class="tag">Mythology × Hip-Hop × Street</p>
+<p class="stat">100M+ Streams · 3 Languages</p>
+</div>
+</div>
+</div>
+<!-- 011 — Hanumankind -->
+<div class="showcase reveal-up" id="case-hanumankind">
+<div class="showcase-info">
+<div class="showcase-num">011 / Artist Site · Concept</div>
+<h3 class="showcase-title">Hanumankind</h3>
+<p class="showcase-desc">A concept site for the Bangalore artist who put Indian rap on the global stage — built around the gravity-well energy of the "Big Dawgs" era. Loud, kinetic, unapologetic: a lyric marquee, count-up stats hitting Billboard numbers, a one-take visual feature and a merch wall. The whole thing is engineered to feel like the moment right before the beat lands.</p><ul class="case-results"><li>Created a kinetic fan concept around the Big Dawgs era.</li><li>Used marquee motion, stats, and merch surfaces to make the site feel performance-led.</li><li>Showed ability to design for youth culture without losing polish.</li></ul>
+<dl class="showcase-credits">
+<dt>Year</dt><dd>2026</dd>
+<dt>Role</dt><dd>Design + Build</dd>
+<dt>Stack</dt><dd>HTML · CSS · JavaScript</dd>
+<dt>Type</dt><dd>Concept · Fan Build</dd>
+</dl>
+<div class="showcase-tags">
+<span class="tag">Artist Site</span>
+<span class="tag">Music</span>
+<span class="tag">Kinetic UI</span>
+<span class="tag">Concept</span>
+</div>
+<a class="showcase-cta" href="https://niamish.github.io/HanumanKind-Concept-Site-/" rel="noopener" target="_blank">Visit Live Site</a>
+</div>
+<div class="showcase-visual visual-hanumankind">
+<div class="ring"></div>
+<div class="content">
+<p class="label">Project 23 · South Side</p>
+<h4 class="wordmark">Big<em>Dawgs</em></h4>
+<div class="meta"><span><b>#1</b> Billboard Global</span><span><b>50M+</b> Views</span></div>
+</div>
+</div>
+</div>
+<!-- 012 — Etheos -->
+<div class="showcase reverse reveal-up" id="case-etheos">
+<div class="showcase-info">
+<div class="showcase-num">012 / Brand · Concept</div>
+<h3 class="showcase-title">Etheos</h3>
+<p class="showcase-desc">A concept brand for a modern philosophy community — named from the Greek ἦθος and θεός, the divine character within all things. Classical serif system, a three-pillar structure (Sophia, Psyche, Praxis), an offerings grid and a thinkers index. Restrained, literate, unhurried: built to look like an institution that has existed far longer than it actually has.</p><ul class="case-results"><li>Built a philosophy-brand concept with classical typography and institutional restraint.</li><li>Organised content around Sophia, Psyche, and Praxis for a clear intellectual system.</li><li>Created a calm editorial surface for long-form thought.</li></ul>
+<dl class="showcase-credits">
+<dt>Year</dt><dd>2026</dd>
+<dt>Role</dt><dd>Design + Build</dd>
+<dt>Stack</dt><dd>HTML · CSS · JavaScript</dd>
+<dt>Type</dt><dd>Concept · Demo</dd>
+</dl>
+<div class="showcase-tags">
+<span class="tag">Brand Concept</span>
+<span class="tag">Editorial</span>
+<span class="tag">Classical Type</span>
+<span class="tag">Community</span>
+</div>
+<a class="showcase-cta" href="https://niamish.github.io/Etheos-/" rel="noopener" target="_blank">Visit Live Site</a>
+</div>
+<div class="showcase-visual visual-etheos">
+<div class="content">
+<div class="pillars"><span>Σ</span><span>Ψ</span><span>Ω</span></div>
+<h4 class="wordmark">ETHEOS</h4>
+<div class="divider"></div>
+<p class="tagline">Philosophy for the modern soul</p>
+<p class="greek">Sophia · Psyche · Praxis</p>
+</div>
+</div>
+</div>
+<!-- 013 — Caveat -->
+<div class="showcase reveal-up" id="case-caveat">
+<div class="showcase-info">
+<div class="showcase-num">013 / Product · Web App</div>
+<h3 class="showcase-title">Caveat</h3>
+<p class="showcase-desc">A contract-intelligence landing page — the fine print, read for you. Caveat reads an agreement end to end and marks every clause that quietly moves risk onto you: severity, a plain-English note, a suggested redline, all in the margin. The page ships with an annotated specimen MSA, a live in-browser clause-pattern preview and a full clause register. Editorial restraint over the usual legal-tech gloss.</p><ul class="case-results"><li>Designed a contract-intelligence concept around clause reading and risk flags.</li><li>Made legal review feel clear, focused, and visually trustworthy.</li><li>Used document texture and annotation patterns to explain the product immediately.</li></ul>
+<dl class="showcase-credits">
+<dt>Year</dt><dd>2026</dd>
+<dt>Role</dt><dd>Design + Build</dd>
+<dt>Stack</dt><dd>HTML · CSS · JavaScript</dd>
+<dt>Output</dt><dd>Landing + Live Demo</dd>
+</dl>
+<div class="showcase-tags">
+<span class="tag">Product</span>
+<span class="tag">Legal-Tech</span>
+<span class="tag">Editorial UI</span>
+<span class="tag">Interactive Demo</span>
+</div>
+<a class="showcase-cta" href="https://niamish.github.io/Caveat-Site-/" rel="noopener" target="_blank">Visit Live Site</a>
+</div>
+<div class="showcase-visual visual-caveat">
+<div class="content">
+<p class="label">C · Contract Intelligence</p>
+<h4 class="wordmark">Caveat.</h4>
+<div class="clause">
+<span class="flag">⚑ Bites · §4</span>
+          Customer shall defend, indemnify, and hold harmless Provider from <span class="hit">any and all claims … without limitation</span>, while Provider's own indemnity is capped at the §3 ceiling.
+        </div>
+<p class="marginnote">→ One-way, uncapped indemnity. Make it mutual.</p>
+</div>
+</div>
+</div>
+</section>
+<!-- MARQUEE BAND 2 (tilted reverse, saffron) -->
+<div class="marquee tilt-reverse">
+<div class="marquee-track reverse">
+<span>Subject matter, not template <span class="star">✦</span> Code as craft <span class="star">✦</span> Built once, built right <span class="star">✦</span> A few engagements per quarter <span class="star">✦</span> End-to-end studio, one operator <span class="star">✦</span> Considered work for considered brands <span class="star">✦</span></span>
+<span aria-hidden="true">Subject matter, not template <span class="star">✦</span> Code as craft <span class="star">✦</span> Built once, built right <span class="star">✦</span> A few engagements per quarter <span class="star">✦</span> End-to-end studio, one operator <span class="star">✦</span> Considered work for considered brands <span class="star">✦</span></span>
+</div>
+</div>
+<!-- PROCESS SECTION MARKER -->
+<div class="section-marker" id="process">
+<div>
+<div class="label">03 · How I Work</div>
+<div class="title">The <em class="accent">Process.</em></div>
+</div>
+<div class="meta">
+    Five stages<br/>
+    Four to twelve weeks<br/>
+    One operator throughout
+  </div>
+</div>
+<!-- PROCESS -->
+<section class="process">
+<div class="process-grid">
+<div class="process-step reveal-up">
+<div class="num">01</div>
+<h4>Discovery &amp; Brief</h4>
+<p>A conversation about what you're building, who it's for, and what the work needs to do. I read your existing assets, your competitors, your source texts. By the end of this stage, we have a shared understanding of what success looks like — measured in outcomes, not deliverables.</p>
+<div class="duration"><span>Duration</span><span>Week 1</span></div>
+</div>
+<div class="process-step reveal-up">
+<div class="num">02</div>
+<h4>Design Direction</h4>
+<p>Two or three concept directions, each shown as a full hero page rather than a moodboard. You see the type system, the colour, the motion language, and the editorial register all at once. We pick one direction and refine, rather than mixing and diluting.</p>
+<div class="duration"><span>Duration</span><span>Week 2 — 3</span></div>
+</div>
+<div class="process-step reveal-up">
+<div class="num">03</div>
+<h4>Build &amp; Iteration</h4>
+<p>The site or application is built in production from week one — no Figma-to-handoff gap. You see real progress on a staging URL. We iterate in code, not in mockups. Performance, accessibility, and semantic structure are part of the build, not retrofits.</p>
+<div class="duration"><span>Duration</span><span>Week 3 — 8</span></div>
+</div>
+<div class="process-step reveal-up">
+<div class="num">04</div>
+<h4>Launch &amp; Handover</h4>
+<p>We ship to production together, with a checklist that covers SEO, analytics, performance budgets, and content workflow. You receive a documented codebase and a CMS your team can use without needing me on call for every change.</p>
+<div class="duration"><span>Duration</span><span>Week 8 — 10</span></div>
+</div>
+<div class="process-step reveal-up">
+<div class="num">05</div>
+<h4>Ongoing Refinement</h4>
+<p>Optional. A monthly retainer for brands that want continuous improvement — A/B tests, new sections, animation polish, performance work, design system evolution. Most clients move into this after launch because the work compounds.</p>
+<div class="duration"><span>Duration</span><span>Monthly · Optional</span></div>
+</div>
+<div class="process-step reveal-up" style="background: var(--ink); color: var(--paper);">
+<div class="num" style="color: var(--saffron);">·</div>
+<h4 style="color: var(--paper);">A note on timing</h4>
+<p style="color: rgba(241,235,220,0.75);">The brief above assumes a substantial scope — a complete brand and site for a serious house. Smaller engagements move faster. A single landing page might ship in two weeks, an application in six. The constraint is rarely calendar time; it's how many decisions can move through one head per week without the work losing coherence.</p>
+<div class="duration" style="color: rgba(241,235,220,0.5); border-color: rgba(241,235,220,0.2);"><span>Constraint</span><span>One operator</span></div>
+</div>
+</div>
+</section>
+<!-- CAPABILITIES -->
+<section class="capabilities" id="capabilities">
+<div class="section-marker">
+<div>
+<div class="label">04 · Studio Capability</div>
+<div class="title">What I <em class="accent">do.</em></div>
+</div>
+<div class="meta">
+      A full studio<br/>
+      operated by one person<br/>
+      end-to-end across the brief
+    </div>
+</div>
+<div class="cap-grid">
+<div class="cap-item reveal-up">
+<div class="cap-num">A.01</div>
+<h3 class="cap-title">Premium E-commerce</h3>
+<p class="cap-body">Storefronts for D2C and luxury brands — Shopify, custom headless, or hand-built. Catalogue integration, lookbook surfaces, editorial sections. Designed for considered purchase journeys, not impulse checkouts.</p>
+<ul class="cap-list"><li>Shopify</li><li>Headless</li><li>Stripe</li><li>Razorpay</li></ul>
+</div>
+<div class="cap-item reveal-up">
+<div class="cap-num">A.02</div>
+<h3 class="cap-title">Web Applications &amp; PWAs</h3>
+<p class="cap-body">Installable applications with offline-first behaviour. Notes, readers, counters, dashboards, internal tools. Built with attention to performance and gesture — interfaces that respect the user's attention.</p>
+<ul class="cap-list"><li>React</li><li>Vue</li><li>Svelte</li><li>Offline-first</li></ul>
+</div>
+<div class="cap-item reveal-up">
+<div class="cap-num">A.03</div>
+<h3 class="cap-title">Brand Websites &amp; Editorial</h3>
+<p class="cap-body">Long-form sites for publishers, channels, scholarly projects, and personal brands. Typographic-first design, narrative-led layouts, CMS integrations that authors actually enjoy using.</p>
+<ul class="cap-list"><li>Sanity</li><li>Contentful</li><li>Strapi</li><li>Markdown</li></ul>
+</div>
+<div class="cap-item reveal-up">
+<div class="cap-num">A.04</div>
+<h3 class="cap-title">Design Systems &amp; Identity</h3>
+<p class="cap-body">Type, colour, layout grids, motion language, and component libraries — codified so the brand stays coherent across web, app, and editorial surfaces over time. Built to evolve, not freeze.</p>
+<ul class="cap-list"><li>Tokens</li><li>Storybook</li><li>Figma</li><li>Notion docs</li></ul>
+</div>
+<div class="cap-item reveal-up">
+<div class="cap-num">A.05</div>
+<h3 class="cap-title">Motion &amp; Generative</h3>
+<p class="cap-body">Custom animations — page loads, transitions, micro-interactions, cinematic sequences. Built in CSS, SVG, Canvas, GSAP, or generated frame-by-frame in Python depending on the use case.</p>
+<ul class="cap-list"><li>GSAP</li><li>Framer</li><li>Lottie</li><li>Pillow · ffmpeg</li></ul>
+</div>
+<div class="cap-item reveal-up">
+<div class="cap-num">A.06</div>
+<h3 class="cap-title">AI &amp; Tooling Pipelines</h3>
+<p class="cap-body">Image-generation pipelines, lookbook generators, content tooling, bespoke admin utilities. The kind of internal tools that quietly compound a brand's output over months. Trained on your visual library, not generic models.</p>
+<ul class="cap-list"><li>Python</li><li>Flux</li><li>SDXL</li><li>Custom training</li></ul>
+</div>
+</div>
+</section>
+<!-- STACK SECTION MARKER -->
+<div class="section-marker">
+<div>
+<div class="label">05 · Tools &amp; Stack</div>
+<div class="title">What I <em class="accent">use.</em></div>
+</div>
+<div class="meta">
+    Tools chosen<br/>
+    for the work<br/>
+    not the trend
+  </div>
+</div>
+<!-- STACK -->
+<section class="stack">
+<div class="stack-grid">
+<div class="stack-group reveal-up">
+<h4>Frontend</h4>
+<ul>
+<li>React <span class="note">primary</span></li>
+<li>Next.js</li>
+<li>Astro <span class="note">content sites</span></li>
+<li>Vue</li>
+<li>HTML · CSS <span class="note">hand-built</span></li>
+</ul>
+</div>
+<div class="stack-group reveal-up">
+<h4>Animation &amp; Motion</h4>
+<ul>
+<li>Framer Motion</li>
+<li>GSAP</li>
+<li>Lottie</li>
+<li>CSS animations</li>
+<li>Canvas · SVG</li>
+</ul>
+</div>
+<div class="stack-group reveal-up">
+<h4>Backend &amp; CMS</h4>
+<ul>
+<li>Sanity <span class="note">preferred</span></li>
+<li>Contentful</li>
+<li>Strapi</li>
+<li>Supabase</li>
+<li>Firebase</li>
+</ul>
+</div>
+<div class="stack-group reveal-up">
+<h4>E-commerce</h4>
+<ul>
+<li>Shopify <span class="note">most common</span></li>
+<li>Custom Headless</li>
+<li>Stripe · Razorpay</li>
+<li>Shopify Liquid</li>
+</ul>
+</div>
+<div class="stack-group reveal-up">
+<h4>Generative &amp; Tooling</h4>
+<ul>
+<li>Python <span class="note">pipelines</span></li>
+<li>Pillow · NumPy</li>
+<li>ReportLab <span class="note">print</span></li>
+<li>ffmpeg</li>
+<li>AI image pipelines</li>
+</ul>
+</div>
+<div class="stack-group reveal-up">
+<h4>Design &amp; Type</h4>
+<ul>
+<li>Figma</li>
+<li>Affinity Designer</li>
+<li>Variable fonts</li>
+<li>Devanagari typography</li>
+<li>Hand-coded prototypes</li>
+</ul>
+</div>
+</div>
+</section>
+<!-- WRITING SECTION MARKER -->
+<div class="section-marker" id="writing">
+<div>
+<div class="label">06 · Writing</div>
+<div class="title">Field <em class="accent">Notes.</em></div>
+</div>
+<div class="meta">
+    Substack<br/>
+    Just Namish<br/>
+    Updated weekly
+  </div>
+</div>
+<!-- WRITING -->
+<section class="writing">
+<div class="writing-list">
+<a class="writing-item reveal-up" href="https://substack.com/@ngx562?r=mr9g3&utm_campaign=profile&utm_medium=profile-page" rel="noopener" target="_blank">
+<div class="date">May 2026</div>
+<div class="title">On building for civilisational depth — notes from Nivaratnam</div>
+<div class="arrow">↗</div>
+</a>
+<a class="writing-item reveal-up" href="https://substack.com/@ngx562?r=mr9g3&utm_campaign=profile&utm_medium=profile-page" rel="noopener" target="_blank">
+<div class="date">Apr 2026</div>
+<div class="title">Why Indian D2C sites still feel like Western imports</div>
+<div class="arrow">↗</div>
+</a>
+<a class="writing-item reveal-up" href="https://substack.com/@ngx562?r=mr9g3&utm_campaign=profile&utm_medium=profile-page" rel="noopener" target="_blank">
+<div class="date">Mar 2026</div>
+<div class="title">Designing for slow reading in a fast-feed world</div>
+<div class="arrow">↗</div>
+</a>
+<a class="writing-item reveal-up" href="https://substack.com/@ngx562?r=mr9g3&utm_campaign=profile&utm_medium=profile-page" rel="noopener" target="_blank">
+<div class="date">Feb 2026</div>
+<div class="title">Sanskrit as system: typography for primary texts</div>
+<div class="arrow">↗</div>
+</a>
+<a class="writing-item reveal-up" href="https://substack.com/@ngx562?r=mr9g3&utm_campaign=profile&utm_medium=profile-page" rel="noopener" target="_blank">
+<div class="date">Jan 2026</div>
+<div class="title">The case against the agency model in Indian luxury</div>
+<div class="arrow">↗</div>
+</a>
+<a class="writing-item reveal-up" href="https://substack.com/@ngx562?r=mr9g3&utm_campaign=profile&utm_medium=profile-page" rel="noopener" target="_blank">
+<div class="date">Dec 2025</div>
+<div class="title">Glassmorphism, three years in — what's aged and what hasn't</div>
+<div class="arrow">↗</div>
+</a>
+</div>
+</section>
+<!-- ENGAGEMENT SECTION MARKER -->
+<div class="section-marker">
+<div>
+<div class="label">07 · Engagement</div>
+<div class="title">How we <em class="accent">work.</em></div>
+</div>
+<div class="meta">
+    Three engagement<br/>
+    models depending on<br/>
+    the stage and scope
+  </div>
+</div>
+<!-- ENGAGEMENT -->
+<section class="engagement">
+<div class="eng-grid">
+<div class="eng-card reveal-up">
+<div class="eng-num">M.01</div>
+<h3 class="eng-title">Discovery Call</h3>
+<p class="eng-price">Free · 30 minutes</p>
+<p class="eng-desc">A short, candid conversation about what you're building. By the end you'll know whether we should work together, and if not, who else you should be talking to.</p>
+<ul class="eng-list">
+<li>Scope and fit assessment</li>
+<li>Honest recommendation</li>
+<li>Referrals if I'm not the right fit</li>
+<li>No deck, no slides</li>
+</ul>
+<a class="eng-cta" href="#contact">Book a Call</a>
+</div>
+<div class="eng-card featured reveal-up">
+<div class="eng-num">M.02 · Most Common</div>
+<h3 class="eng-title">Project Engagement</h3>
+<p class="eng-price">From ₹2L · 4 — 12 weeks</p>
+<p class="eng-desc">A complete build, end-to-end. Brand site, full e-commerce, web application, or editorial project. Fixed scope, fixed timeline, one operator throughout.</p>
+<ul class="eng-list">
+<li>Design direction + full build</li>
+<li>Staging from week one</li>
+<li>Production launch + handover</li>
+<li>30 days post-launch support</li>
+</ul>
+<a class="eng-cta" href="#contact">Start a Project</a>
+</div>
+<div class="eng-card reveal-up">
+<div class="eng-num">M.03</div>
+<h3 class="eng-title">Studio Retainer</h3>
+<p class="eng-price">From ₹75K / month</p>
+<p class="eng-desc">For brands that want continuous design and engineering capacity. New sections, A/B tests, animation polish, design system evolution, performance work. Predictable monthly rhythm.</p>
+<ul class="eng-list">
+<li>Dedicated days each week</li>
+<li>Continuous iteration cycle</li>
+<li>Priority response window</li>
+<li>3-month minimum commitment</li>
+</ul>
+<a class="eng-cta" href="#contact">Discuss Retainer</a>
+</div>
+</div>
+</section>
+<!-- FAQ -->
+<section class="faq">
+<div class="section-marker">
+<div>
+<div class="label">08 · FAQ</div>
+<div class="title">Things <em class="accent">asked.</em></div>
+</div>
+<div class="meta">
+      Questions that come up<br/>
+      in the discovery call<br/>
+      answered here
+    </div>
+</div>
+<div class="faq-list">
+<div class="faq-item">
+<button aria-controls="faq-answer-1" aria-expanded="false" class="faq-question" type="button">
+<span>Do you take on small or quick-fix jobs?</span>
+<span class="plus"></span>
+</button>
+<div class="faq-answer" id="faq-answer-1"><div class="faq-answer-inner">Rarely. The studio is set up for engagements where craft and depth matter, which means a single hero section change or a quick CSS fix usually isn't a good fit. If your project is small but conceptually serious — a single beautifully built landing page for a specific launch, for example — that can work. Otherwise I'll usually refer you to a freelancer better suited to small-scope work.</div></div>
+</div>
+<div class="faq-item">
+<button aria-controls="faq-answer-2" aria-expanded="false" class="faq-question" type="button">
+<span>What's your typical project timeline?</span>
+<span class="plus"></span>
+</button>
+<div class="faq-answer" id="faq-answer-2"><div class="faq-answer-inner">Most engagements run four to twelve weeks depending on scope. A single landing page might ship in two weeks. A full e-commerce brand build typically runs eight to ten. A custom web application can run twelve or more. The variable is rarely my speed — it's how many decisions can move through one head per week without the work losing coherence. I'd rather quote eight weeks honestly than four weeks optimistically.</div></div>
+</div>
+<div class="faq-item">
+<button aria-controls="faq-answer-3" aria-expanded="false" class="faq-question" type="button">
+<span>Do you work with international clients?</span>
+<span class="plus"></span>
+</button>
+<div class="faq-answer" id="faq-answer-3"><div class="faq-answer-inner">Yes — currently working with brands across India, the UAE, the UK, and the US. Time-zone overlap is manageable for most regions; we run a weekly written update and one live call per week. Invoicing is in INR or USD depending on the client.</div></div>
+</div>
+<div class="faq-item">
+<button aria-controls="faq-answer-4" aria-expanded="false" class="faq-question" type="button">
+<span>Can you take over an existing codebase?</span>
+<span class="plus"></span>
+</button>
+<div class="faq-answer" id="faq-answer-4"><div class="faq-answer-inner">Sometimes. If the existing codebase is reasonable React or Next.js with a clear component structure, yes. If it's a heavily customised Wix, Squarespace, or no-code site, it's usually faster and cleaner to rebuild than retrofit. I'll do a code audit in the first week of any project that involves takeover and tell you honestly which way is better.</div></div>
+</div>
+<div class="faq-item">
+<button aria-controls="faq-answer-5" aria-expanded="false" class="faq-question" type="button">
+<span>What's your payment structure?</span>
+<span class="plus"></span>
+</button>
+<div class="faq-answer" id="faq-answer-5"><div class="faq-answer-inner">For project engagements: 40% on signing, 40% at the midpoint, 20% on launch. For retainers: monthly in advance, first month due on start date. International clients pay via Wise or direct bank transfer. Indian clients via NEFT or UPI. I don't take crypto.</div></div>
+</div>
+<div class="faq-item">
+<button aria-controls="faq-answer-6" aria-expanded="false" class="faq-question" type="button">
+<span>Do you offer maintenance after launch?</span>
+<span class="plus"></span>
+</button>
+<div class="faq-answer" id="faq-answer-6"><div class="faq-answer-inner">Thirty days of post-launch support is included in every project engagement — for bug fixes, small tweaks, and minor content updates. Beyond that, most clients transition into a monthly retainer or scope a v2 engagement six to twelve months later. I don't believe in build-and-ghost, and I don't believe in selling you maintenance hours you don't need either.</div></div>
+</div>
+<div class="faq-item">
+<button aria-controls="faq-answer-7" aria-expanded="false" class="faq-question" type="button">
+<span>Why work with one person instead of an agency?</span>
+<span class="plus"></span>
+</button>
+<div class="faq-answer" id="faq-answer-7"><div class="faq-answer-inner">Because for a certain kind of work, an agency is the wrong tool. Agencies are optimised for scale — they need to slot your project into a pipeline, hand it across roles, and ship a result that fits a known template. That works for some briefs. For a luxury brand that needs the visual register to actually understand its category, or a dharmic publisher who needs the Sanskrit typography to be set with discipline, the agency model dilutes more than it adds. One person who reads your source material and builds the result themselves is faster, more coherent, and often less expensive at the right scope.</div></div>
+</div>
+</div>
+</section>
+<!-- CONTACT -->
+<section class="contact" id="contact">
+<p class="label">09 · Let's begin</p>
+<h2>Build something <em class="accent">considered.</em></h2>
+<a class="contact-email" href="mailto:nimishgupta563@gmail.com">nimishgupta563@gmail.com</a>
+<div class="contact-meta">
+<div class="contact-meta-item">
+<h5>Studio Hours</h5>
+<p>Monday to Friday, 10am — 7pm IST. Most replies within twelve hours.</p>
+</div>
+<div class="contact-meta-item">
+<h5>Currently Booking</h5>
+<p>Q3 2026 onwards. Two project slots remaining for the quarter.</p>
+</div>
+<div class="contact-meta-item">
+<h5>Best Fit</h5>
+<p>Luxury Indian houses, dharmic publishers, premium D2C brands, considered editorial.</p>
+</div>
+<div class="contact-meta-item">
+<h5>Not a Fit</h5>
+<p>Quick fixes, template builds, crypto, gambling, anything that needs to ship by Tuesday.</p>
+</div>
+</div>
+<div class="channels"><a href="https://substack.com/@ngx562?r=mr9g3&utm_campaign=profile&utm_medium=profile-page" rel="noopener" target="_blank">Substack ↗</a><a href="https://x.com/nimishgupta563" rel="noopener" target="_blank">X / Twitter ↗</a><a href="https://github.com/niamish" rel="noopener" target="_blank">GitHub ↗</a><a href="mailto:nimishgupta563@gmail.com">Email ↗</a></div>
+</section>
+<!-- NEWSLETTER -->
+<section class="newsletter">
+<div>
+<h3>Field notes, sent occasionally.</h3>
+<p>One email a month with new work, design notes, and links to writing. No promotions, no sales funnels.</p>
+</div>
+<div class="newsletter-actions"><a class="newsletter-link" href="https://substack.com/@ngx562?r=mr9g3&utm_campaign=profile&utm_medium=profile-page" rel="noopener" target="_blank">Read Substack</a><a class="newsletter-link secondary" href="mailto:nimishgupta563@gmail.com?subject=Portfolio%20inquiry">Request Updates</a></div>
+</section>
+<!-- FOOTER -->
+<footer>
+<div class="footer-grid">
+<div class="footer-brand">
+<h4>Namish<span class="dot">.</span></h4>
+<p>An independent design and development studio based in Ludhiana, India. Building websites and applications for brands that take their subject matter seriously.</p>
+</div>
+<div class="footer-col">
+<h5>Studio</h5>
+<ul>
+<li><a href="#work">Selected Work</a></li>
+<li><a href="#process">Process</a></li>
+<li><a href="#capabilities">Capabilities</a></li>
+<li><a href="#writing">Writing</a></li>
+</ul>
+</div>
+<div class="footer-col">
+<h5>Connect</h5>
+<ul><li><a href="https://substack.com/@ngx562?r=mr9g3&utm_campaign=profile&utm_medium=profile-page" rel="noopener" target="_blank">Substack</a></li><li><a href="https://x.com/nimishgupta563" rel="noopener" target="_blank">X / Twitter</a></li><li><a href="https://github.com/niamish" rel="noopener" target="_blank">GitHub</a></li><li><a href="mailto:nimishgupta563@gmail.com">Email</a></li></ul>
+</div>
+<div class="footer-col">
+<h5>Contact</h5>
+<ul>
+<li><a href="mailto:nimishgupta563@gmail.com">nimishgupta563@gmail.com</a></li>
+<li>Ludhiana, India</li>
+<li>Mon — Fri · IST</li>
+</ul>
+</div>
+</div>
+<div class="footer-base">
+<div>© 2026 Namish · Independent Studio · All work property of respective clients</div>
+<div class="deva">सत्यमेव शिल्पम्</div>
+<div>Built by hand · Ludhiana · India</div>
+</div>
+</footer>
+<script>
+/* ============================================================
+   1. LOADER
+   ============================================================ */
+const pct = document.getElementById('loadPct');
+let n = 0;
+const loaderTick = setInterval(() => {
+  n += Math.floor(Math.random() * 7) + 3;
+  if (n >= 100) { n = 100; clearInterval(loaderTick); }
+  pct.textContent = String(n).padStart(3, '0');
+}, 70);
+setTimeout(() => document.body.classList.add('loaded'), 2600);
+
+/* ============================================================
+   2. CLOCK (IST)
+   ============================================================ */
+const clockEl = document.getElementById('clock');
+function tick() {
+  const d = new Date();
+  const opts = { hour: '2-digit', minute: '2-digit', second: '2-digit',
+                 timeZone: 'Asia/Kolkata', hour12: false };
+  clockEl.textContent = d.toLocaleTimeString('en-GB', opts) + ' IST';
+}
+tick(); setInterval(tick, 1000);
+
+/* ============================================================
+   3. DYNAMIC NAVIGATION
+   ============================================================ */
+const siteNav = document.getElementById('siteNav');
+const navToggle = document.getElementById('navToggle');
+const navLinks = document.getElementById('primaryNavLinks');
+let lastScrollY = window.scrollY;
+let tickingNav = false;
+
+function closeNavMenu() {
+  siteNav?.classList.remove('nav-open');
+  navToggle?.setAttribute('aria-expanded', 'false');
+  navToggle?.setAttribute('aria-label', 'Open navigation menu');
+}
+
+function updateNavOnScroll() {
+  const current = window.scrollY;
+  const scrollingDown = current > lastScrollY && current > 120;
+
+  siteNav?.classList.toggle('nav-at-top', current < 24);
+
+  if (siteNav?.classList.contains('nav-open')) {
+    siteNav.classList.remove('nav-hidden');
+  } else if (scrollingDown) {
+    siteNav?.classList.add('nav-hidden');
+  } else {
+    siteNav?.classList.remove('nav-hidden');
+  }
+
+  lastScrollY = Math.max(current, 0);
+  tickingNav = false;
+}
+
+window.addEventListener('scroll', () => {
+  if (!tickingNav) {
+    requestAnimationFrame(updateNavOnScroll);
+    tickingNav = true;
+  }
+}, { passive: true });
+
+navToggle?.addEventListener('click', () => {
+  const isOpen = siteNav.classList.toggle('nav-open');
+  siteNav.classList.remove('nav-hidden');
+  navToggle.setAttribute('aria-expanded', String(isOpen));
+  navToggle.setAttribute('aria-label', isOpen ? 'Close navigation menu' : 'Open navigation menu');
+});
+
+navLinks?.querySelectorAll('a').forEach(link => {
+  link.addEventListener('click', closeNavMenu);
+});
+
+window.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape') closeNavMenu();
+});
+
+/* ============================================================
+   4. CUSTOM CURSOR + RING + HOVER STATES
+   ============================================================ */
+const cursor = document.querySelector('.cursor');
+const ring   = document.querySelector('.cursor-ring');
+let mx = 0, my = 0, rx = 0, ry = 0;
+
+window.addEventListener('mousemove', e => {
+  mx = e.clientX; my = e.clientY;
+  cursor.style.transform = `translate(${mx}px, ${my}px) translate(-50%, -50%)`;
+});
+
+function ringLoop() {
+  rx += (mx - rx) * 0.18;
+  ry += (my - ry) * 0.18;
+  ring.style.transform = `translate(${rx}px, ${ry}px) translate(-50%, -50%)`;
+  requestAnimationFrame(ringLoop);
+}
+ringLoop();
+
+document.querySelectorAll('a, button, .showcase-visual, .cap-item, .eng-card, .stack-group').forEach(el => {
+  el.addEventListener('mouseenter', () => {
+    cursor.classList.add('hover');
+    ring.classList.add('hover');
+  });
+  el.addEventListener('mouseleave', () => {
+    cursor.classList.remove('hover');
+    ring.classList.remove('hover');
+  });
+});
+
+/* ============================================================
+   5. SCROLL REVEALS
+   ============================================================ */
+const io = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      e.target.classList.add('in');
+      io.unobserve(e.target);
+    }
+  });
+}, { threshold: 0.12, rootMargin: '0px 0px -60px 0px' });
+document.querySelectorAll('.reveal-up').forEach(el => io.observe(el));
+
+/* ============================================================
+   6. STAT NUMBER COUNT-UP
+   ============================================================ */
+const statIO = new IntersectionObserver(entries => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      const el = entry.target;
+      const target = parseInt(el.dataset.count, 10);
+      if (!isNaN(target)) {
+        const suffix = el.querySelector('.small') ? el.querySelector('.small').outerHTML : '';
+        let cur = 0;
+        const step = Math.max(1, Math.ceil(target / 30));
+        const ticker = setInterval(() => {
+          cur += step;
+          if (cur >= target) { cur = target; clearInterval(ticker); }
+          el.innerHTML = String(cur).padStart(2, '0') + suffix;
+        }, 40);
+      }
+      statIO.unobserve(el);
+    }
+  });
+}, { threshold: 0.5 });
+document.querySelectorAll('[data-count]').forEach(el => statIO.observe(el));
+
+/* ============================================================
+   7. FAQ ACCORDION
+   ============================================================ */
+document.querySelectorAll('.faq-question').forEach(q => {
+  q.addEventListener('click', () => {
+    const item = q.closest('.faq-item');
+    const wasOpen = item.classList.contains('open');
+
+    document.querySelectorAll('.faq-item').forEach(it => it.classList.remove('open'));
+    document.querySelectorAll('.faq-question').forEach(btn => btn.setAttribute('aria-expanded', 'false'));
+
+    if (!wasOpen) {
+      item.classList.add('open');
+      q.setAttribute('aria-expanded', 'true');
+    }
+  });
+});
+
+/* ============================================================
+   8. GENERATE JAPA MALA BEADS
+   ============================================================ */
+const beadsGroup = document.getElementById('mala-beads-v2');
+if (beadsGroup) {
+  const N = 36;
+  const cx = 120, cy = 120, r = 92;
+  const sumeruIdx = 17;
+  let html = '';
+  for (let i = 0; i < N; i++) {
+    const ang = (2 * Math.PI * i) / N - Math.PI / 2;
+    const x = cx + r * Math.cos(ang);
+    const y = cy + r * Math.sin(ang);
+    const isSumeru = i === sumeruIdx;
+    const fill = isSumeru ? '#b8762c' : '#8b6f47';
+    const size = isSumeru ? 5.5 : 3.6;
+    const op = isSumeru ? 1 : 0.7;
+    html += `<circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="${size}" fill="${fill}" opacity="${op}"/>`;
+  }
+  beadsGroup.innerHTML = html;
+}
+
+</script>
+</body>
+</html>
