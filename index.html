@@ -1260,6 +1260,108 @@ body.loaded .loader { pointer-events: none; }
   font-size: 0.6rem; letter-spacing: 0.03em; color: var(--saffron-deep);
 }
 
+
+
+/* -- FitHer (fitness app) ------------------------------------ */
+.visual-fither {
+  background: radial-gradient(120% 120% at 20% 0%, #ff7ab6 0%, #401a35 42%, #120816 100%);
+  color: #fff;
+  overflow: hidden;
+}
+.visual-fither::before {
+  content: '';
+  position: absolute; inset: 0;
+  background:
+    linear-gradient(rgba(255,255,255,0.07) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.07) 1px, transparent 1px);
+  background-size: 34px 34px;
+  mask-image: radial-gradient(circle at 50% 50%, #000 0%, transparent 72%);
+}
+.visual-fither .pulse-ring {
+  position: absolute; top: 50%; left: 50%;
+  width: 62%; aspect-ratio: 1;
+  transform: translate(-50%, -50%);
+  border: 1px solid rgba(255,255,255,0.22);
+  border-radius: 50%;
+}
+.visual-fither .pulse-ring::before,
+.visual-fither .pulse-ring::after {
+  content: '';
+  position: absolute; inset: 14%;
+  border: 1px solid rgba(255,255,255,0.14);
+  border-radius: 50%;
+}
+.visual-fither .pulse-ring::after { inset: 30%; border-color: rgba(255,255,255,0.25); }
+.visual-fither .content {
+  position: absolute; inset: 0;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  z-index: 2; text-align: center; padding: 2rem;
+}
+.visual-fither .label {
+  font-family: var(--mono); font-size: 0.58rem;
+  letter-spacing: 0.28em; text-transform: uppercase;
+  color: rgba(255,255,255,0.65); margin-bottom: 1rem;
+}
+.visual-fither .wordmark {
+  font-family: var(--sans); font-weight: 900;
+  font-size: clamp(3rem, 8vw, 5.5rem);
+  letter-spacing: -0.05em; line-height: 0.9;
+  color: #fff;
+}
+.visual-fither .wordmark span { color: #ffd1e6; }
+.visual-fither .stats-row {
+  display: flex; gap: 1rem; flex-wrap: wrap; justify-content: center;
+  margin-top: 1.25rem;
+  font-family: var(--mono); font-size: 0.56rem;
+  letter-spacing: 0.14em; text-transform: uppercase;
+  color: rgba(255,255,255,0.68);
+}
+.visual-fither .stats-row b { color: #fff; font-weight: 500; }
+
+/* -- LUXE (premium e-commerce) ------------------------------- */
+.visual-luxe {
+  background: radial-gradient(130% 100% at 50% 0%, #f7efe3 0%, #b79a6c 45%, #15100a 100%);
+  overflow: hidden;
+}
+.visual-luxe .shine {
+  position: absolute; inset: -40% -20%;
+  background: linear-gradient(115deg, transparent 35%, rgba(255,255,255,0.36) 46%, transparent 58%);
+  transform: rotate(8deg);
+  animation: luxeShine 7s ease-in-out infinite;
+}
+@keyframes luxeShine {
+  0%, 100% { transform: translateX(-18%) rotate(8deg); opacity: 0.25; }
+  50% { transform: translateX(18%) rotate(8deg); opacity: 0.55; }
+}
+.visual-luxe .content {
+  position: absolute; inset: 0;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  z-index: 2; text-align: center; padding: 2rem;
+}
+.visual-luxe .label {
+  font-family: var(--mono); font-size: 0.58rem;
+  letter-spacing: 0.32em; text-transform: uppercase;
+  color: rgba(20,16,10,0.65); margin-bottom: 1.2rem;
+}
+.visual-luxe .wordmark {
+  font-family: var(--serif); font-style: italic;
+  font-size: clamp(3.2rem, 9vw, 6.5rem);
+  letter-spacing: -0.04em; line-height: 0.9;
+  color: #17110b;
+}
+.visual-luxe .divider {
+  width: 68px; height: 1px;
+  background: linear-gradient(90deg, transparent, #17110b, transparent);
+  margin: 1.4rem auto;
+}
+.visual-luxe .tagline {
+  font-family: var(--mono); font-size: 0.58rem;
+  letter-spacing: 0.22em; text-transform: uppercase;
+  color: rgba(20,16,10,0.72);
+  border: 1px solid rgba(20,16,10,0.25);
+  border-radius: 999px; padding: 0.4rem 0.85rem;
+}
+
 /* ============================================================
    PROCESS SECTION
    ============================================================ */
@@ -1933,7 +2035,8 @@ footer {
   }
   .marquee-track,
   .visual-vidurneeti .flower,
-  .visual-vanta .scan {
+  .visual-vanta .scan,
+  .visual-luxe .shine {
     animation: none !important;
   }
 }
@@ -2000,8 +2103,8 @@ footer {
 <!-- MARQUEE BAND 1 -->
 <div class="marquee tilt">
 <div class="marquee-track">
-<span>Luxury Jewellery <span class="star">✦</span> Cookware D2C <span class="star">✦</span> Glassmorphic UI <span class="star">✦</span> Dharmic Apps <span class="star">✦</span> Editorial Brand <span class="star">✦</span> Kinetic Typography <span class="star">✦</span> Sanskrit Devanagari <span class="star">✦</span> Premium E-commerce <span class="star">✦</span></span>
-<span aria-hidden="true">Luxury Jewellery <span class="star">✦</span> Cookware D2C <span class="star">✦</span> Glassmorphic UI <span class="star">✦</span> Dharmic Apps <span class="star">✦</span> Editorial Brand <span class="star">✦</span> Kinetic Typography <span class="star">✦</span> Sanskrit Devanagari <span class="star">✦</span> Premium E-commerce <span class="star">✦</span></span>
+<span>Luxury Jewellery <span class="star">✦</span> Cookware D2C <span class="star">✦</span> Glassmorphic UI <span class="star">✦</span> Dharmic Apps <span class="star">✦</span> Editorial Brand <span class="star">✦</span> Kinetic Typography <span class="star">✦</span> Sanskrit Devanagari <span class="star">✦</span> Premium E-commerce <span class="star">✦</span> Fitness Apps <span class="star">✦</span> Luxury Storefronts <span class="star">✦</span></span>
+<span aria-hidden="true">Luxury Jewellery <span class="star">✦</span> Cookware D2C <span class="star">✦</span> Glassmorphic UI <span class="star">✦</span> Dharmic Apps <span class="star">✦</span> Editorial Brand <span class="star">✦</span> Kinetic Typography <span class="star">✦</span> Sanskrit Devanagari <span class="star">✦</span> Premium E-commerce <span class="star">✦</span> Fitness Apps <span class="star">✦</span> Luxury Storefronts <span class="star">✦</span></span>
 </div>
 </div>
 <!-- INDEX -->
@@ -2011,15 +2114,15 @@ footer {
 </div>
 <div class="stats">
 <div class="reveal-up">
-<div class="stat-num" data-count="12">00<span class="small">+</span></div>
+<div class="stat-num" data-count="15">00<span class="small">+</span></div>
 <div class="stat-label">Brands built end-to-end</div>
 </div>
 <div class="reveal-up">
-<div class="stat-num" data-count="6">00<span class="small">/</span></div>
+<div class="stat-num" data-count="7">00<span class="small">/</span></div>
 <div class="stat-label">Apps shipped this year</div>
 </div>
 <div class="reveal-up">
-<div class="stat-num" data-count="4">00<span class="small">★</span></div>
+<div class="stat-num" data-count="5">00<span class="small">★</span></div>
 <div class="stat-label">Live D2C storefronts</div>
 </div>
 <div class="reveal-up">
@@ -2036,7 +2139,7 @@ footer {
 </div>
 <div class="meta">
     2024 — 2026<br/>
-    Thirteen projects<br/>
+    Fifteen projects<br/>
     Across categories
   </div>
 </div>
@@ -2477,6 +2580,67 @@ footer {
 </div>
 </div>
 </div>
+
+<!-- 014 — FitHer -->
+<div class="showcase reverse reveal-up" id="case-fither">
+<div class="showcase-info">
+<div class="showcase-num">014 / Fitness · Web App</div>
+<h3 class="showcase-title">FitHer</h3>
+<p class="showcase-desc">A women-focused fitness web app built around workouts, nutrition, progress tracking, community, and profile surfaces. Designed as a polished product demo rather than a static landing page, with a dashboard-led structure that shows how a wellness brand can move from content into a usable daily product.</p><ul class="case-results"><li>Built a complete multi-section fitness app surface with dashboard, workouts, nutrition, and community.</li><li>Created a clean product demo suitable for pitching wellness, coaching, or subscription ideas.</li><li>Shipped as a live GitHub Pages project for instant portfolio proof.</li></ul>
+<dl class="showcase-credits">
+<dt>Year</dt><dd>2026</dd>
+<dt>Role</dt><dd>Design + Build</dd>
+<dt>Stack</dt><dd>React · Vite · CSS</dd>
+<dt>Output</dt><dd>Live Web App</dd>
+</dl>
+<div class="showcase-tags">
+<span class="tag">Fitness App</span>
+<span class="tag">React</span>
+<span class="tag">Dashboard</span>
+<span class="tag">Wellness</span>
+</div>
+<a class="showcase-cta" href="https://niamish.github.io/fither-app/" rel="noopener" target="_blank">Visit Live Site</a>
+</div>
+<div class="showcase-visual visual-fither">
+<div class="pulse-ring"></div>
+<div class="content">
+<p class="label">Move · Track · Glow</p>
+<h4 class="wordmark">Fit<span>Her</span></h4>
+<div class="stats-row"><span><b>5</b> Product Areas</span><span><b>Live</b> Demo</span></div>
+</div>
+</div>
+</div>
+<!-- 015 — LUXE E-commerce -->
+<div class="showcase reveal-up" id="case-luxe-ecommerce">
+<div class="showcase-info">
+<div class="showcase-num">015 / Premium E-commerce</div>
+<h3 class="showcase-title">LUXE E-commerce</h3>
+<p class="showcase-desc">A premium e-commerce storefront prototype built to demonstrate product discovery, wishlisting, cart flows, checkout surfaces, and luxury retail pacing. The project shows how a template can feel like a brand system — not a generic shop — through controlled typography, refined spacing, product-led navigation, and polished interaction states.</p><ul class="case-results"><li>Built a live luxury storefront demo with shop, product, cart, wishlist, and checkout surfaces.</li><li>Designed the flow as a sellable template for D2C brands and digital product marketplaces.</li><li>Deployed publicly so clients can test the experience directly.</li></ul>
+<dl class="showcase-credits">
+<dt>Year</dt><dd>2026</dd>
+<dt>Role</dt><dd>Design + Build</dd>
+<dt>Stack</dt><dd>React · Vite · CSS</dd>
+<dt>Output</dt><dd>Live Storefront</dd>
+</dl>
+<div class="showcase-tags">
+<span class="tag">E-commerce</span>
+<span class="tag">React</span>
+<span class="tag">Luxury UI</span>
+<span class="tag">Template</span>
+</div>
+<a class="showcase-cta" href="https://niamish.github.io/Luxe-Ecommerce/" rel="noopener" target="_blank">Visit Live Site</a>
+</div>
+<div class="showcase-visual visual-luxe">
+<div class="shine"></div>
+<div class="content">
+<p class="label">Premium Storefront</p>
+<h4 class="wordmark">LUXE</h4>
+<div class="divider"></div>
+<p class="tagline">Cart · Wishlist · Checkout</p>
+</div>
+</div>
+</div>
+
 </section>
 <!-- MARQUEE BAND 2 (tilted reverse, saffron) -->
 <div class="marquee tilt-reverse">
